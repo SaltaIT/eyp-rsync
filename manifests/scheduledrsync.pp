@@ -1,12 +1,12 @@
 define rsync::scheduledrsync(
                               $origin,
                               $destination,
+                              $ensure      = 'present',
                               $hour        = '0',
                               $minute      = '0',
                               $month       = undef,
                               $monthday    = undef,
                               $weekday     = undef,
-                              $ensure      = 'present',
                               $cronjobname = undef,
                               $ionice      = true,
                               $user        = 'root',
