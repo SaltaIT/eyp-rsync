@@ -2,14 +2,14 @@ define rsync::scheduledrsync(
                               $origin,
                               $destination,
                               $ensure      = 'present',
+                              $cronjobname = undef,
+                              $user        = 'root',
+                              $ionice      = true,
                               $hour        = '0',
                               $minute      = '0',
                               $month       = undef,
                               $monthday    = undef,
                               $weekday     = undef,
-                              $cronjobname = undef,
-                              $ionice      = true,
-                              $user        = 'root',
                             ) {
 
   if($cronjobname!=undef)
