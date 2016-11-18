@@ -1,7 +1,6 @@
 class rsync::params {
 
   $package_name='rsync'
-  $service_name='rsync'
 
   case $::osfamily
   {
