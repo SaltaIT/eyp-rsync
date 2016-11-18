@@ -5,6 +5,7 @@ define rsync::scheduledrsync(
                               $cronjobname = undef,
                               $user        = 'root',
                               $ionice      = true,
+                              $delete      = true,
                               $hour        = undef,
                               $minute      = undef,
                               $month       = undef,
@@ -24,7 +25,7 @@ define rsync::scheduledrsync(
   #"find ${path} ${type} -mtime ${mtime} ${action}"
   cron { $cron_job_name:
     ensure   => $ensure,
-    command  => inline_template('<% if @ionice %>ionice -c2 -n2 <% end %>rsync -a -H -x --numeric-ids <%= @origin %> <%= @destination %>'),
+    command  => inline_template('<% if @ionice %>ionice -c2 -n2 <% end %>rsync -a -H -x --numeric-ids <% if @delete %>--delete <% end %><%= @origin %> <%= @destination %>'),
     user     => $user,
     hour     => $hour,
     minute   => $minute,
