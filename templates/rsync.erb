@@ -1,0 +1,6 @@
+<% if @ionice %>ionice -c<%= @ionice_class %> -n<%= @ionice_level %> <% end -%>
+ rsync <% if @archive %>-a<% end %> <% if @hardlinks %>-H<% end %> <% if @one_file_system %>-x<% end -%>
+ --numeric-ids <% -%>
+<% if @delete %> --delete <% end -%>
+<% if defined?(@chmod) %> --chmod=<%= @chmod %><% end -%>
+ <%= @origin %> <%= @destination %>

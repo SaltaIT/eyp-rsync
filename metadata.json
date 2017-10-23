@@ -1,11 +1,11 @@
 {
   "name": "eyp-rsync",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "author": "eyp",
   "summary": "simple rsync scheduler",
   "license": "Apache-2.0",
   "source": "https://github.com/NTTCom-MS/eyp-rsync",
-  "project_page": null,
+  "project_page": "https://github.com/NTTCom-MS/eyp-rsync",
   "issues_url": "https://github.com/NTTCom-MS/eyp-rsync/issues",
   "dependencies": [
     {"name":"puppetlabs/stdlib","version_requirement":">= 1.0.0"},
@@ -38,10 +38,6 @@
     }
   ],
   "requirements": [
-    {
-      "name": "pe",
-      "version_requirement": ">= 3.0.0"
-    },
     {
       "name": "puppet",
       "version_requirement": ">= 3.0.0"
