@@ -1,12 +1,16 @@
 # CHANGELOG
 
+## 0.1.5
+
+* added rsyncmanager
+
 ## 0.1.4
 
 * added chmod option to rsync
 * added variables for some hard coded rsync options:
   * archive
   * hardlinks
-  * one_file_systemç
+  * one_file_system
 * added configurable ionice class and level
 
 ## 0.1.3
