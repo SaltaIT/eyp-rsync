@@ -7,7 +7,7 @@ ionice="<%= @ionice_args %>"
 rsync-path="<%= @rsync_path %>"
 <% end -%>
 <% if @exclude.any? -%>
-exclude => [ <%= @exclude.map{ |val| "\"#{val}\"" }.join(',') %> ]
+exclude = [ <%= @exclude.map{ |val| "\"#{val}\"" }.join(',') %> ]
 <% end -%>
 delete = <%= @delete %>
 remote="<%= @remote %>"
