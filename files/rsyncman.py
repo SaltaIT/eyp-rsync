@@ -94,6 +94,10 @@ consoleHandler.setFormatter(logFormatter)
 rootLogger.addHandler(consoleHandler)
 
 if not os.path.isfile(config_file):
+    logging.error("Error - config file NOT FOUND ("+config_file+")")
+    sys.exit(1)
+
+if not access(config_file, R_OK)
     logging.error("Error reading config file ("+config_file+")")
     sys.exit(1)
 
