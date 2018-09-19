@@ -17,5 +17,9 @@ describe 'rsync class' do
       expect(apply_manifest(pp).exit_code).to eq(0)
     end
 
+    describe package('rsync') do
+      it { is_expected.to be_installed }
+    end
+
   end
 end
