@@ -12,7 +12,6 @@ define rsync::manager::schedule (
                                 ) {
   include ::rsync::manager
 
-  #command  => inline_template('<% if @ionice %>ionice -c2 -n2 <% end %>rsync -a -H -x --numeric-ids <% if @delete %>--delete <% end %><%= @origin %> <%= @destination %>'),
   cron { $schedule_name:
     ensure   => $ensure,
     command  => "/usr/bin/rsyncman /etc/rsyncman/${schedule_name}.conf\n",
@@ -36,11 +35,5 @@ define rsync::manager::schedule (
     order   => '00',
     content => template("${module_name}/rsyncman/base.erb")
   }
-
-  # DEBUG
-  # file { '/tmp/rsync':
-  #   ensure => 'present',
-  #   content => template("${module_name}/rsync.erb"),
-  # }
 
 }
