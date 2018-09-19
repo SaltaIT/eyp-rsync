@@ -9,6 +9,7 @@ define rsync::manager::schedule (
                                   $weekday       = '*',
                                   $mail_to       = undef,
                                   $host_id       = undef,
+                                  $logdir        = '/var/log/rsyncman',
                                 ) {
   include ::rsync::manager
 
