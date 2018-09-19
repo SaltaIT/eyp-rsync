@@ -1,6 +1,7 @@
 define rsync::manager::schedule (
                                   $ensure        = 'present',
                                   $schedule_name = $name,
+                                  $user          = 'root',
                                   $hour          = '*',
                                   $minute        = '*',
                                   $month         = '*',
