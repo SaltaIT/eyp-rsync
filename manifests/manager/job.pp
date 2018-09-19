@@ -1,15 +1,16 @@
 define rsync::manager::job(
                             $path,
                             $remote,
-                            $remote_path   = undef,
-                            $schedule_name = $name,
-                            $ionice_args   = undef,
-                            $rsync_path    = undef,
-                            $exclude       = [],
-                            $delete        = false,
-                            $check_file    = undef,
-                            $expected_fs   = undef,
-                            $order         = '42',
+                            $remote_path        = undef,
+                            $schedule_name      = $name,
+                            $ionice_args        = undef,
+                            $rsync_path         = undef,
+                            $exclude            = [],
+                            $delete             = false,
+                            $check_file         = undef,
+                            $expected_fs        = undef,
+                            $expected_remote_fs = undef,
+                            $order              = '42',
                           ) {
   include rsync::manager
 
