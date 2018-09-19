@@ -59,7 +59,7 @@ def get_fs_type(path):
 
 def runJob(ionice,delete,exclude,rsyncpath,path,remote,remotepath,checkfile,expected_fs):
     global error_count
-    command=ionice+'rsync -v -a -H -x --numeric-ids '+delete+exclude+rsyncpath+' '+path+' '+remote+':'+remotepath
+    command=ionice+'rsync -v -a -H -x --numeric-ids '+delete+exclude+rsyncpath+' '+path+' '+remote+':'+remotepath+' 2>&1'
     if os.path.exists(checkfile):
         logging.info("checkfile found: "+checkfile)
         fs_type = get_fs_type(path)[0]
