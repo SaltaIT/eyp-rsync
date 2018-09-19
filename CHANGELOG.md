@@ -3,6 +3,7 @@
 ## 0.1.5
 
 * added rsyncmanager
+* added support for Ubuntu 16.04 and 18.04
 
 ## 0.1.4
 
