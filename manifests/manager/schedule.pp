@@ -24,10 +24,10 @@ define rsync::manager::schedule (
   }
 
   concat { "/etc/rsyncman/${schedule_name}.conf":
-    ensure  => $ensure,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0640',
+    ensure => $ensure,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0640',
   }
 
   concat::fragment{ "/etc/rsyncman/${schedule_name}.conf global config":
