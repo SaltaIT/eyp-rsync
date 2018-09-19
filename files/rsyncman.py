@@ -110,7 +110,7 @@ except Exception, e:
     sys.exit(1)
 
 try:
-    logdir=config.get('rsyncman', 'logdir')
+    logdir=config.get('rsyncman', 'logdir').strip('"')
 except:
     logdir=os.path.dirname(os.path.abspath(config_file))
 
@@ -122,11 +122,11 @@ rootLogger.addHandler(fileHandler)
 rootLogger.setLevel(0)
 
 try:
-    to_addr=config.get('rsyncman', 'to')
+    to_addr=config.get('rsyncman', 'to').strip('"')
 except:
     to_addr=''
 try:
-    id_host=config.get('rsyncman', 'host-id')
+    id_host=config.get('rsyncman', 'host-id').strip('"')
 except:
     id_host=socket.gethostname()
 
@@ -138,7 +138,7 @@ if len(config.sections()) > 0:
             except:
                 ionice=''
             try:
-                expected_fs=config.get(path, 'expected-fs')
+                expected_fs=config.get(path, 'expected-fs').strip('"')
             except:
                 expected_fs=''
             try:
@@ -146,10 +146,10 @@ if len(config.sections()) > 0:
             except:
                 rsyncpath=''
             try:
-                if os.path.isabs(config.get(path, 'check-file')):
-                    checkfile=config.get(path, 'check-file')
+                if os.path.isabs(config.get(path, 'check-file').strip('"')):
+                    checkfile=config.get(path, 'check-file').strip('"')
                 else:
-                    checkfile=path+'/'+config.get(path, 'check-file')
+                    checkfile=path+'/'+config.get(path, 'check-file').strip('"')
             except:
                 checkfile=path
             try:
@@ -172,7 +172,7 @@ if len(config.sections()) > 0:
             except:
                 exclude=' '
             try:
-                remotepath=config.get(path, 'remote-path')
+                remotepath=config.get(path, 'remote-path').strip('"')
             except:
                 remotepath=os.path.dirname(path)
             try:
