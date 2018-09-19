@@ -9,6 +9,7 @@ import psutil,os
 import datetime, time
 import socket
 import smtplib
+import re
 from ConfigParser import SafeConfigParser
 from subprocess import Popen,PIPE,STDOUT
 from os import access, R_OK
@@ -74,8 +75,19 @@ def runJob(ionice,delete,exclude,rsyncpath,path,remote,remotepath,checkfile,expe
             logging.info("RSYNC: "+line)
 
         if process.returncode!=0:
-            logging.error("ERROR found running job for "+path)
-            error_count=error_count+1
+            #https://git.samba.org/?p=rsync.git;a=blob_plain;f=support/rsync-no-vanished;hb=HEAD
+            if process.returncode==24:
+                regex = re.compile(r'^(file has vanished: |rsync warning: some files vanished before they could be transferred)', re.MULTILINE)
+                matches = [m.groups() for m in regex.finditer(data)]
+
+                if len(matches) > 0:
+                    logging.info(path+" competed successfully")
+                else:
+                    logging.error("ERROR found running job for "+path)
+                    error_count=error_count+1
+            else:
+                logging.error("ERROR found running job for "+path)
+                error_count=error_count+1
         else:
             logging.info(path+" competed successfully")
     else:
