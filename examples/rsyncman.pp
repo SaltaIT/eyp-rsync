@@ -7,6 +7,8 @@ rsync::manager::schedule { 'demo':
 }
 
 rsync::manager::job { 'demo':
-  path => '/demo',
-  remote => 'jprats@127.0.0.1'
+  path        => '/demo',
+  remote      => 'jprats@127.0.0.1'
+  exclude     => [ 'a', 'b' ],
+  remote_path => '/demo2',
 }
