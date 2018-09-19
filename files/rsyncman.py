@@ -41,6 +41,8 @@ def sendReportEmail(to_addr, id_host):
     server.sendmail(from_addr, to_addr, text)
     server.quit()
 
+    logging.info("sent report to "+to_addr)
+
 # thank god for stackoverflow - https://stackoverflow.com/questions/25283882/determining-the-filesystem-type-from-a-path-in-python
 def get_fs_type(path):
     partition = {}
@@ -153,7 +155,8 @@ rootLogger.setLevel(0)
 try:
     to_addr=config.get('rsyncman', 'to').strip('"')
 except:
-    to_addr=''
+    to_addr='penis'
+
 try:
     id_host=config.get('rsyncman', 'host-id').strip('"')
 except:
@@ -217,14 +220,13 @@ if len(config.sections()) > 0:
                 continue
             runJob(ionice,delete,exclude,rsyncpath,path,remote,remotepath,checkfile,expected_fs,expected_remote_fs)
 
-            if error_count >0:
-                logging.error("ERROR_COUNT:" + str(error_count))
-                sys.exit(1)
-            else:
-                logging.info("SUCCESS")
+    if error_count >0:
+        logging.error("ERRORS FOUND: "+str(error_count))
+    else:
+        logging.info("SUCCESS")
 
-            if to_addr:
-                sendReportEmail(to_addr, id_host)
+    if to_addr:
+        sendReportEmail(to_addr, id_host)
 
 else:
     logging.error("No config found")
