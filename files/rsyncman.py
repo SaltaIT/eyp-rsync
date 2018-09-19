@@ -107,7 +107,7 @@ except Exception, e:
 try:
     logdir=config.get('rsyncman', 'logdir')
 except:
-    logdir=os.path.abspath(config_file)
+    logdir=os.path.dirname(os.path.abspath(config_file))
 
 logFile = "{0}/{1}-{2}.log".format(logdir, 'rsyncman', datetime.datetime.fromtimestamp(time.time()).strftime('%Y%m%d-%H%M%S'))
 fileHandler = logging.FileHandler(logFile)
