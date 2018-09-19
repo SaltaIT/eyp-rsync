@@ -15,7 +15,7 @@ define rsync::manager::schedule (
 
   cron { $schedule_name:
     ensure   => $ensure,
-    command  => "/usr/bin/rsyncman /etc/rsyncman/${schedule_name}.conf\n",
+    command  => "/usr/bin/rsyncman -c /etc/rsyncman/${schedule_name}.conf\n",
     user     => $user,
     hour     => $hour,
     minute   => $minute,
