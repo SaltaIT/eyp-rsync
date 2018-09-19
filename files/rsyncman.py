@@ -8,9 +8,10 @@ import json
 import psutil,os
 import datetime, time
 import socket
+import smtplib
 from ConfigParser import SafeConfigParser
 from subprocess import Popen,PIPE,STDOUT
-import smtplib
+from os import access, R_OK
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 
