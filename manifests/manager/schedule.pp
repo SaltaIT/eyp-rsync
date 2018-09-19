@@ -30,10 +30,10 @@ define rsync::manager::schedule (
     mode    => '0640',
   }
 
-  concat::fragment{ "/etc/mysql/${instance_name}/my.cnf header":
-    target  => "/etc/mysql/${instance_name}/my.cnf",
-    order   => '000',
-    content => "#\n# puppet managed file\n#\n\n",
+  concat::fragment{ "/etc/rsyncman/${schedule_name}.conf global config":
+    target  => "/etc/rsyncman/${schedule_name}.conf",
+    order   => '00',
+    content => template("${module_name}/rsyncman/base.erb")
   }
 
   # DEBUG

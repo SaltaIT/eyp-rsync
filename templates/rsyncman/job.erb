@@ -1,0 +1,22 @@
+
+[<%= @path %>]
+<% if defined?(@ionice_args) -%>
+ionice="<%= @ionice_args %>"
+<% end -%>
+<% if defined?(@rsync_path) -%>
+rsync-path="<%= @rsync_path %>"
+<% end -%>
+<% if @exclude.any? -%>
+exclude => [ <%= @exclude.map{ |val| "\"#{val}\"" }.join(',') %> ]
+<% end -%>
+delete = <%= @delete %>
+remote="<%= @remote %>"
+<% if defined?(@remote_path) -%>
+remote-path="<%= @remote_path %>"
+<% end -%>
+<% if defined?(@check_file) -%>
+check-file=<%= @check_file %>
+<% end -%>
+<% if defined?(@expected_fs) -%>
+expected-fs=<%= @expected_fs %>
+<% end -%>
