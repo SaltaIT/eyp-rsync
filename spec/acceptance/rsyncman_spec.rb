@@ -42,7 +42,7 @@ describe 'rsync class' do
       its(:content) { should match 'host-id=demopuppet' }
       its(:content) { should match 'logdir=/var/log/rsyncman' }
       its(:content) { should match '[/demo]' }
-      its(:content) { should match 'exclude = [ "a","b","c" ]' }
+      its(:content) { should match 'exclude = [ \"a\",\"b\",\"c\" ]' }
       its(:content) { should match 'delete = false' }
       its(:content) { should match 'remote="jprats@127.0.0.1"' }
       its(:content) { should match 'remote-path="/demo2"' }
