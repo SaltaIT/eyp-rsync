@@ -1,5 +1,4 @@
-class rsync::manager(
-                    ) inherits rsync::params{
+class rsync::manager() inherits rsync::params{
 
   include ::rsync
 

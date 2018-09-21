@@ -2,7 +2,7 @@
   "name": "eyp-rsync",
   "version": "0.1.5",
   "author": "eyp",
-  "summary": "simple rsync scheduler",
+  "summary": "rsync and rsyncman job management",
   "license": "Apache-2.0",
   "source": "https://github.com/NTTCom-MS/eyp-rsync",
   "project_page": "https://github.com/NTTCom-MS/eyp-rsync",
@@ -36,6 +36,23 @@
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [ "14.04", "16.04", "18.04" ]
+    },
+    {
+      "operatingsystem": "Fedora",
+      "operatingsystemrelease": [ "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28" ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [ "8", "9" ]
+
+    },
+    {
+      "operatingsystem": "OpenSuSE",
+      "operatingsystemrelease": [ "42", "42.1", "42.2", "42.3" ]
+    },
+    {
+      "operatingsystem": "SLES",
+      "operatingsystemrelease": [ "12", "12.1", "12.2" ]
     }
   ],
   "requirements": [

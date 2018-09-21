@@ -19,6 +19,8 @@ define rsync::scheduledrsync(
                               $chmod           = undef,
                             ) {
 
+  include ::rsync
+
   if($cronjobname!=undef)
   {
     $cron_job_name=$cronjobname

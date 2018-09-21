@@ -6,7 +6,6 @@
 2. [Module Description](#module-description)
 3. [Setup](#setup)
     * [What rsync affects](#what-rsync-affects)
-    * [Setup requirements](#setup-requirements)
     * [Beginning with rsync](#beginning-with-rsync)
 4. [Usage](#usage)
 5. [Reference](#reference)
@@ -17,40 +16,53 @@
 
 ## Overview
 
-A one-maybe-two sentence summary of what the module does/what problem it solves.
-This is your 30 second elevator pitch for your module. Consider including
-OS/Puppet version it works with.
+rsync and rsyncman job management
 
 ## Module Description
 
-If applicable, this section should have a brief description of the technology
-the module integrates with and what that integration enables. This section
-should answer the questions: "What does this module *do*?" and "Why would I use
-it?"
-
-If your module has a range of functionality (installation, configuration,
-management, etc.) this is the time to mention it.
+This module can schedule ryncs and rsyncman jobs to be able to syncronize data
 
 ## Setup
 
 ### What rsync affects
 
-* A list of files, packages, services, or operations that the module will alter,
-  impact, or execute on the system it's installed on.
-* This is a great place to stick any warnings.
-* Can be in list or paragraph form.
-
-### Setup Requirements
-
-This module requires pluginsync enabled 
+* Manages rsync package
+* Installs rsyncman via **rsync::manager**
+* Creates cronjobs for rsync amb rsyncman
 
 ### Beginning with rsync
 
-The very basic steps needed for a user to get the module up and running.
+#### rsync
 
-If your most recent release breaks compatibility or requires particular steps
-for upgrading, you may wish to include an additional section here: Upgrading
-(For an example, see http://forge.puppetlabs.com/puppetlabs/firewall).
+Configure a rsync job everyday at 0:00 to copy data from /origin to /destination on the same server
+
+```puppet
+rsync::scheduledrsync { 'demo':
+  origin      => '/origin',
+  destination => '/destination',
+  hour    => '0',
+  minute  => '0',
+}
+```
+
+#### rsyncman
+
+Configure a rsync job everyday at 0:00 to copy data from /demo to testuser@1.2.3.4:/demo2, sending a report to demo@example.com
+
+```puppet
+rsync::manager::schedule { 'demo':
+  mail_to => 'demo@example.com',
+  host_id => 'demopuppet',
+  hour    => '0',
+  minute  => '0',
+}
+
+rsync::manager::job { 'demo':
+  path        => '/demo',
+  remote      => 'testuser@1.2.3.4',
+  remote_path => '/demo2',
+}
+```
 
 ## Usage
 
@@ -59,23 +71,71 @@ the fancy stuff with your module here.
 
 ## Reference
 
-Here, list the classes, types, providers, facts, etc contained in your module.
-This section should include all of the under-the-hood workings of your module so
-people know what the module is touching on their system but don't need to mess
-with things. (We are working on automating this section!)
+### rsync
+
+* **manage_package**: (default: true)
+* **package_ensure**: (default: installed)
+
+#### rsync::scheduledrsync
+
+* **origin**:,
+* **destination**:,
+* **ensure**:          = 'present',
+* **cronjobname**:     = undef,
+* **user**:            = 'root',
+* **ionice**:          = true,
+* **ionice_class**:    = '2',
+* **ionice_level**:    = '2',
+* **delete**:          = true,
+* **hour**:            = '\*',
+* **minute**:          = '\*',
+* **month**:           = '\*',
+* **monthday**:        = '\*',
+* **weekday**:         = '\*',
+* **archive**:         = true,
+* **hardlinks**:       = true,
+* **one_file_system**: = true,
+* **chmod**:           = undef,
+
+### rsync::manager
+
+#### rsync::manager::schedule
+
+* **ensure**:        = 'present',
+* **schedule_name**: = $name,
+* **user**:          = 'root',
+* **hour**:          = '\*',
+* **minute**:        = '\*',
+* **month**:         = '\*',
+* **monthday**:      = '\*',
+* **weekday**:       = '\*',
+* **mail_to**:       = undef,
+* **host_id**:       = undef,
+* **logdir**:        = '/var/log/rsyncman',
+
+#### rsync::manager::job
+
+* **path**:,
+* **remote**:,
+* **remote_path**:        = undef,
+* **schedule_name**:      = $name,
+* **ionice_args**:        = undef,
+* **rsync_path**:         = undef,
+* **exclude**:            = [],
+* **delete**:             = false,
+* **check_file**:         = undef,
+* **expected_fs**:        = undef,
+* **expected_remote_fs**: = undef,
+* **order**:              = '42',
 
 ## Limitations
 
-This is where you list OS compatibility, version compatibility, etc.
+Tested on CentOS and on Ubuntu but should work anywhere
 
 ## Development
 
 We are pushing to have acceptance testing in place, so any new feature should
 have some test to check both presence and absence of any feature
-
-### TODO
-
-TODO list
 
 ### Contributing
 

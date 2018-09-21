@@ -5,34 +5,9 @@ class rsync::params {
 
   case $::osfamily
   {
-    'redhat':
-    {
-      case $::operatingsystemrelease
-      {
-        /^[5-7].*$/:
-        {
-        }
-        default: { fail("Unsupported RHEL/CentOS version! - ${::operatingsystemrelease}")  }
-      }
-    }
-    'Debian':
-    {
-      case $::operatingsystem
-      {
-        'Ubuntu':
-        {
-          case $::operatingsystemrelease
-          {
-            /^1[468].*$/:
-            {
-            }
-            default: { fail("Unsupported Ubuntu version! - ${::operatingsystemrelease}")  }
-          }
-        }
-        'Debian': { fail('Unsupported')  }
-        default: { fail('Unsupported Debian flavour!')  }
-      }
-    }
+    'redhat': { }
+    'Debian': { }
+    'Suse' : { }
     default: { fail('Unsupported OS!')  }
   }
 }
