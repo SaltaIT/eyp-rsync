@@ -1,4 +1,8 @@
-class rsync::manager() inherits rsync::params{
+class rsync::manager(
+                      $logdir_owner = 'root',
+                      $logdir_group = 'root',
+                      $logdir_mode = '0750',
+                    ) inherits rsync::params{
 
   include ::rsync
 

@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.1.6
+
+* rsyncman.py bugfix
+* configurable owner, group and mode for schedules config files
+* configurable file mode for log directory
+
 ## 0.1.5
 
 * added rsyncmanager

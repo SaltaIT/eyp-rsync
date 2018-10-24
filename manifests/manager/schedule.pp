@@ -2,6 +2,8 @@ define rsync::manager::schedule (
                                   $ensure        = 'present',
                                   $schedule_name = $name,
                                   $user          = 'root',
+                                  $group         = 'root',
+                                  $schedule_mode = '0640',
                                   $hour          = '*',
                                   $minute        = '*',
                                   $month         = '*',
@@ -26,9 +28,9 @@ define rsync::manager::schedule (
 
   concat { "/etc/rsyncman/${schedule_name}.conf":
     ensure => $ensure,
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0640',
+    owner  => $user,
+    group  => $group,
+    mode   => $schedule_mode,
   }
 
   concat::fragment{ "/etc/rsyncman/${schedule_name}.conf global config":

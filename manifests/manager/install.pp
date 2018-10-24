@@ -22,8 +22,8 @@ class rsync::manager::install inherits rsync::manager {
 
   file { '/var/log/rsyncman':
     ensure => 'directory',
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0755',
+    owner  => $rsync::manager::logdir_owner,
+    group  => $rsync::manager::logdir_group,
+    mode   => $rsync::manager::logdir_mode,
   }
 }
