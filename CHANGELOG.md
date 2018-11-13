@@ -2,7 +2,9 @@
 
 ## 0.1.7
 
-* rsyncman.py bugfix: NFS mounts were not detected correctly as shares
+* rsyncman.py bugfix:
+  - NFS mounts were not detected correctly as shares
+  - fix remote fs type detection
 
 ## 0.1.6
 
