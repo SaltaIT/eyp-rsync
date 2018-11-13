@@ -54,7 +54,7 @@ def sendReportEmail(to_addr, id_host):
 # thank god for stackoverflow - https://stackoverflow.com/questions/25283882/determining-the-filesystem-type-from-a-path-in-python
 def get_fs_type(path):
     partition = {}
-    for part in psutil.disk_partitions():
+    for part in psutil.disk_partitions(True):
         partition[part.mountpoint] = (part.fstype, part.device)
     if path in partition:
         return partition[path]
