@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.1.7
+
+* rsyncman.py bugfix: NFS mounts were not detected correctly as shares
+
 ## 0.1.6
 
 * rsyncman.py bugfix
