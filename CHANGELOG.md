@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.1.8
+
+* minor bugfix rsyncman
+
 ## 0.1.7
 
 * rsyncman.py bugfix:

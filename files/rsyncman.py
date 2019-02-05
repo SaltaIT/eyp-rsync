@@ -75,8 +75,8 @@ def get_remote_fs_type(remote, path):
     process = Popen(command,stderr=PIPE,stdout=PIPE,shell=True)
     data = process.communicate()[0]
     if process.wait() != 0:
-        logging.error("ABORTING  - error getting remote fs type")
-        error_count=error_count+1
+        # logging.error("ABORTING  - error getting remote fs type")
+        # error_count=error_count+1
         return "unkown"
     else:
         return data.splitlines()[0]
