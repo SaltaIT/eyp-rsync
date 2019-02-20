@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.1.9
+
+* rsyncman: fix dependencies
+
 ## 0.1.8
 
 * minor bugfix rsyncman

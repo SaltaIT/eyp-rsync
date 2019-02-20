@@ -35,7 +35,7 @@ define rsync::manager::schedule (
 
   concat::fragment{ "/etc/rsyncman/${schedule_name}.conf global config":
     target  => "/etc/rsyncman/${schedule_name}.conf",
-    order   => '00',
+    order   => 'a00',
     content => template("${module_name}/rsyncman/base.erb")
   }
 

@@ -16,7 +16,8 @@ define rsync::manager::job(
 
   concat::fragment{ "/etc/rsyncman/${schedule_name}.conf ${path}":
     target  => "/etc/rsyncman/${schedule_name}.conf",
-    order   => $order,
+    order   => "b${order}",
     content => template("${module_name}/rsyncman/job.erb"),
+    require => Concat["/etc/rsyncman/${schedule_name}.conf"],
   }
 }
