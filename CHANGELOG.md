@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.1.10
+
+* added dryrun option to **rsyncman**
+
 ## 0.1.9
 
 * rsyncman: fix dependencies

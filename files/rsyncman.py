@@ -17,14 +17,18 @@ from os import access, R_OK
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 
-error_count=0
+error_count = 0
+execute_rsync = True
+
+# TODO: canary file + canary string
 
 def help():
     print 'Usage: '+sys.argv[0]+' [-c <config file>] [-b]'
     print ''
-    print '-h,--help print this message'
-    print '-c,--config config file'
-    print '-b,--syncback sync from destination to origin'
+    print '-h,--help: print this message'
+    print '-c,--config: config file'
+    print '-b,--syncback: sync from destination to origin'
+    print '-d,--dryrun: dry run - just simulate execution'
     print ''
 
 def sendReportEmail(to_addr, id_host):
@@ -32,24 +36,29 @@ def sendReportEmail(to_addr, id_host):
     global logFile
 
     from_addr=getpass.getuser()+'@'+socket.gethostname()
+    if execute_rsync:
+        msg = MIMEMultipart()
+        msg['From'] = from_addr
+        msg['To'] = to_addr
+        if error_count > 0:
+            msg['Subject'] = id_host+"-RSYNCMAN-ERROR"
+        else:
+            msg['Subject'] = id_host+"-RSYNCMAN-OK"
 
-    msg = MIMEMultipart()
-    msg['From'] = from_addr
-    msg['To'] = to_addr
-    if error_count > 0:
-        msg['Subject'] = id_host+"-RSYNCMAN-ERROR"
+        body = "please check "+logFile+" on "+socket.gethostname()
+        msg.attach(MIMEText(body, 'plain'))
+
+        server = smtplib.SMTP('localhost')
+        text = msg.as_string()
+        server.sendmail(from_addr, to_addr, text)
+        server.quit()
+
+        logging.info("sent report to "+to_addr)
     else:
-        msg['Subject'] = id_host+"-RSYNCMAN-OK"
-
-    body = "please check "+logFile+" on "+socket.gethostname()
-    msg.attach(MIMEText(body, 'plain'))
-
-    server = smtplib.SMTP('localhost')
-    text = msg.as_string()
-    server.sendmail(from_addr, to_addr, text)
-    server.quit()
-
-    logging.info("sent report to "+to_addr)
+        if error_count > 0:
+            logging.info("DRY RUN: sending ERROR report to: "+to_addr+" from: "+from_addr)
+        else:
+            logging.info("DRY RUN: sending OK report to "+to_addr+" from: "+from_addr)
 
 # thank god for stackoverflow - https://stackoverflow.com/questions/25283882/determining-the-filesystem-type-from-a-path-in-python
 def get_fs_type(path):
@@ -90,50 +99,53 @@ def runJob(ionice,delete,exclude,rsyncpath,path,remote,remotepath,checkfile,expe
         command=ionice+'rsync -v -a -H -x --numeric-ids '+delete+exclude+rsyncpath+' '+remote+':'+remotepath+'/'+basename_path+' '+dirname_path+' 2>&1'
     else:
         command=ionice+'rsync -v -a -H -x --numeric-ids '+delete+exclude+rsyncpath+' '+path+' '+remote+':'+remotepath+' 2>&1'
-    if os.path.exists(checkfile):
-        logging.info("checkfile found: "+checkfile)
+    if execute_rsync:
+        if os.path.exists(checkfile):
+            logging.info("checkfile found: "+checkfile)
 
-        fs_type = get_fs_type(path)[0]
-        if expected_fs and expected_fs != fs_type:
-            logging.error("ABORTING "+path+": fs type does not match expected fs - found: "+fs_type+" expected: "+expected_fs)
-            error_count=error_count+1
-            return
+            fs_type = get_fs_type(path)[0]
+            if expected_fs and expected_fs != fs_type:
+                logging.error("ABORTING "+path+": fs type does not match expected fs - found: "+fs_type+" expected: "+expected_fs)
+                error_count=error_count+1
+                return
 
-        remote_fs_type = get_remote_fs_type(remote, remotepath)
-        if expected_remote_fs and expected_remote_fs != remote_fs_type:
-            logging.error("ABORTING "+remote+':'+remotepath+": fs type does not match expected fs - found: "+remote_fs_type+" expected: "+expected_remote_fs)
-            error_count=error_count+1
-            return
+            remote_fs_type = get_remote_fs_type(remote, remotepath)
+            if expected_remote_fs and expected_remote_fs != remote_fs_type:
+                logging.error("ABORTING "+remote+':'+remotepath+": fs type does not match expected fs - found: "+remote_fs_type+" expected: "+expected_remote_fs)
+                error_count=error_count+1
+                return
 
-        logging.debug("RSYNC command: "+command)
-        process = Popen(command,stderr=PIPE,stdout=PIPE,shell=True)
-        data = process.communicate()[0]
+            logging.debug("RSYNC command: "+command)
+            process = Popen(command,stderr=PIPE,stdout=PIPE,shell=True)
+            data = process.communicate()[0]
 
-        for line in data.splitlines():
-            logging.info("RSYNC: "+line)
+            for line in data.splitlines():
+                logging.info("RSYNC: "+line)
 
-        if process.returncode!=0:
-            #https://git.samba.org/?p=rsync.git;a=blob_plain;f=support/rsync-no-vanished;hb=HEAD
-            if process.returncode==24:
-                regex = re.compile(r'^(file has vanished: |rsync warning: some files vanished before they could be transferred)', re.MULTILINE)
-                matches = [m.groups() for m in regex.finditer(data)]
+            if process.returncode!=0:
+                #https://git.samba.org/?p=rsync.git;a=blob_plain;f=support/rsync-no-vanished;hb=HEAD
+                if process.returncode==24:
+                    regex = re.compile(r'^(file has vanished: |rsync warning: some files vanished before they could be transferred)', re.MULTILINE)
+                    matches = [m.groups() for m in regex.finditer(data)]
 
-                if len(matches) > 0:
-                    logging.info(path+" competed successfully")
+                    if len(matches) > 0:
+                        logging.info(path+" competed successfully")
+                    else:
+                        logging.error("ERROR found running job for "+path)
+                        error_count=error_count+1
                 else:
                     logging.error("ERROR found running job for "+path)
                     error_count=error_count+1
             else:
-                logging.error("ERROR found running job for "+path)
-                error_count=error_count+1
+                logging.info(path+" competed successfully")
         else:
-            logging.info(path+" competed successfully")
+            logging.error("ABORTING "+path+": check file does NOT exists: "+checkfile)
+            error_count=error_count+1
     else:
-        logging.error("ABORTING "+path+": check file does NOT exists: "+checkfile)
-        error_count=error_count+1
+        logging.info("DRY RUN: "+command)
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "hc:b", ["--help", "--config", "--syncback"])
+    opts, args = getopt.getopt(sys.argv[1:], "hc:bd", ["--help", "--config", "--syncback", "--dryrun"])
 except getopt.GetoptError, err:
     help()
     sys.exit(3)
@@ -149,6 +161,8 @@ for opt, value in opts:
         config_file = value
     elif opt in ("-b", "--syncback"):
         syncback = True
+    elif opt in ("-d", "--dryrun"):
+        execute_rsync = False
     else:
         assert False, "unhandled option"
         help()
