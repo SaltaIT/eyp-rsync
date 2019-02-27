@@ -139,6 +139,25 @@ then
   TEST3_4="ok"
 fi
 
+echo "====================="
+echo "* CHECKFILE FAILURE *"
+echo "====================="
+
+rm -f "${DIR_ORIGIN}/check_file"
+touch "${DIR_ORIGIN}/file_not_to_be_copied"
+
+python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync.config
+
+if [ -f "${DIR_ORIGIN}/file_not_to_be_copied" ];
+then
+  TEST4_1="ok"
+fi
+
+if [ ! -f "${DIR_DESTINATION}/file_not_to_be_copied" ];
+then
+  TEST4_2="ok"
+fi
+
 echo ""
 echo "TEST 0 - check environment"
 echo "======"
@@ -168,11 +187,17 @@ echo "TEST3_2: ${TEST3_2}"
 echo "TEST3_3: ${TEST3_3}"
 echo "TEST4_4: ${TEST3_4}"
 echo ""
+echo "TEST 4 - checkfile failure"
+echo "======"
+echo "TEST4_1: ${TEST4_1}"
+echo "TEST4_2: ${TEST4_2}"
+echo ""
 
 if [ -z "${TEST0_1}" ] || [ -z "${TEST0_2}" ] || [ -z "${TEST0_3}" ] || [ -z "${TEST0_4}" ] || \
     [ -z "${TEST1_1}" ] || [ -z "${TEST1_2}" ] || [ -z "${TEST1_3}" ] || [ -z "${TEST1_4}" ] || \
     [ -z "${TEST2_1}" ] || [ -z "${TEST2_2}" ] || [ -z "${TEST2_3}" ] || [ -z "${TEST2_4}" ] || \
-    [ -z "${TEST3_1}" ] || [ -z "${TEST3_2}" ] || [ -z "${TEST3_3}" ] || [ -z "${TEST3_4}" ];
+    [ -z "${TEST3_1}" ] || [ -z "${TEST3_2}" ] || [ -z "${TEST3_3}" ] || [ -z "${TEST3_4}" ] || \
+    [ -z "${TEST4_1}" ] || [ -z "${TEST4_2}" ];
 then
   echo "FOUND ERRORS"
   exit 1
