@@ -228,18 +228,22 @@ if len(config.sections()) > 0:
                 ionice='ionice '+config.get(path, 'ionice').strip('"')+' '
             except:
                 ionice=''
+
             try:
                 expected_fs=config.get(path, 'expected-fs').strip('"')
             except:
                 expected_fs=''
+
             try:
                 expected_remote_fs=config.get(path, 'expected-remote-fs').strip('"')
             except:
                 expected_remote_fs=''
+
             try:
                 rsyncpath='--rsync-path="'+config.get(path, 'rsync-path').strip('"')+'"'
             except:
                 rsyncpath=''
+
             try:
                 if os.path.isabs(config.get(path, 'check-file').strip('"')):
                     checkfile=config.get(path, 'check-file').strip('"')
@@ -247,6 +251,7 @@ if len(config.sections()) > 0:
                     checkfile=path+'/'+config.get(path, 'check-file').strip('"')
             except:
                 checkfile=path
+
             try:
                 if config.getboolean(path, 'delete'):
                     delete='--delete'
@@ -254,6 +259,7 @@ if len(config.sections()) > 0:
                     delete=''
             except:
                 delete=''
+
             try:
                 exclude_config_get = config.get(path,'exclude')
                 try:
@@ -266,17 +272,19 @@ if len(config.sections()) > 0:
                     continue
             except:
                 exclude=' '
+
             try:
                 remotepath=config.get(path, 'remote-path').strip('"')
             except:
                 remotepath=os.path.dirname(path)
+
             try:
                 remote=config.get(path, 'remote').strip('"')
-
             except Exception, e:
                 logging.error("remote is mandatory, aborting rsync for "+path+" - "+str(e))
                 error_count=error_count+1
                 continue
+            
             runJob(ionice,delete,exclude,rsyncpath,path,remote,remotepath,checkfile,expected_fs,expected_remote_fs,syncback)
 
     if error_count >0:
