@@ -3,6 +3,7 @@
 ## 0.1.10
 
 * added dryrun option to **rsyncman**
+* allow local destinations (ie remote is an empty string)
 
 ## 0.1.9
 

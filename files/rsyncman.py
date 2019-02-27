@@ -79,6 +79,10 @@ def get_fs_type(path):
 
 def get_remote_fs_type(remote, path):
     global error_count
+
+    if not remote:
+        return get_fs_type(path)
+
     #stat -f -c %T .
     command='ssh '+remote+' stat -f -c %T '+path+' 2>/dev/null'
     process = Popen(command,stderr=PIPE,stdout=PIPE,shell=True)
@@ -96,22 +100,24 @@ def runJob(ionice,delete,exclude,rsyncpath,path,remote,remotepath,checkfile,expe
     if syncback:
         basename_path=os.path.basename(path)
         dirname_path=os.path.dirname(path)
-        command=ionice+'rsync -v -a -H -x --numeric-ids '+delete+exclude+rsyncpath+' '+remote+':'+remotepath+'/'+basename_path+' '+dirname_path+' 2>&1'
+        command=ionice+'rsync -v -a -H -x --numeric-ids '+delete+exclude+rsyncpath+' '+remote+remotepath+'/'+basename_path+' '+dirname_path+' 2>&1'
     else:
-        command=ionice+'rsync -v -a -H -x --numeric-ids '+delete+exclude+rsyncpath+' '+path+' '+remote+':'+remotepath+' 2>&1'
+        command=ionice+'rsync -v -a -H -x --numeric-ids '+delete+exclude+rsyncpath+' '+path+' '+remote+remotepath+' 2>&1'
     if execute_rsync:
         if os.path.exists(checkfile):
             logging.info("checkfile found: "+checkfile)
 
             fs_type = get_fs_type(path)[0]
+            logging.debug("For: "+path+" found fs type: "+fs_type)
             if expected_fs and expected_fs != fs_type:
                 logging.error("ABORTING "+path+": fs type does not match expected fs - found: "+fs_type+" expected: "+expected_fs)
                 error_count=error_count+1
                 return
 
             remote_fs_type = get_remote_fs_type(remote, remotepath)
+            logging.debug("For: "+remote+remotepath+": found fs type: "+remote_fs_type)
             if expected_remote_fs and expected_remote_fs != remote_fs_type:
-                logging.error("ABORTING "+remote+':'+remotepath+": fs type does not match expected fs - found: "+remote_fs_type+" expected: "+expected_remote_fs)
+                logging.error("ABORTING "+remote+remotepath+": fs type does not match expected fs - found: "+remote_fs_type+" expected: "+expected_remote_fs)
                 error_count=error_count+1
                 return
 
@@ -280,11 +286,13 @@ if len(config.sections()) > 0:
 
             try:
                 remote=config.get(path, 'remote').strip('"')
+                if remote:
+                    remote=remote+":"
             except Exception, e:
                 logging.error("remote is mandatory, aborting rsync for "+path+" - "+str(e))
                 error_count=error_count+1
                 continue
-            
+
             runJob(ionice,delete,exclude,rsyncpath,path,remote,remotepath,checkfile,expected_fs,expected_remote_fs,syncback)
 
     if error_count >0:
