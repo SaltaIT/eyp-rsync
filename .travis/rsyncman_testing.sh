@@ -21,7 +21,7 @@ then
   TEST0_1="ok"
 fi
 
-if [ -f "${DIR_DESTINATION}/file_to_be_deleted" ];
+if [ -f "${DIR_DESTINATION}/file_to_be_removed" ];
 then
   TEST0_2="ok"
 fi
@@ -39,7 +39,7 @@ then
   TEST1_1="ok"
 fi
 
-if [ ! -f "${DIR_DESTINATION}/file_to_be_deleted" ];
+if [ ! -f "${DIR_DESTINATION}/file_to_be_removed" ];
 then
   TEST1_2="ok"
 fi
