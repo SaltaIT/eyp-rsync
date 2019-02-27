@@ -28,9 +28,12 @@ then
   TEST0_2="ok"
 fi
 
+echo ""
 echo "TEST 0"
+echo "======"
 echo "TEST0_1: ${TEST0_1}"
 echo "TEST0_2: ${TEST0_2}"
+echo ""
 
 if [ -z "${TEST0_1}" ] || [ -z "${TEST0_2}" ];
 then
