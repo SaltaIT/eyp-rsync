@@ -10,6 +10,10 @@ DIR_DESTINATION="/home/travis/build/jordiprats/eyp-rsync/.travis/destination"
 
 pip install -r /home/travis/build/jordiprats/eyp-rsync/files/requirements.txt
 
+echo "==============="
+echo "* BASE STATUS *"
+echo "==============="
+
 echo $DIR_ORIGIN
 ls -la $DIR_ORIGIN
 
@@ -28,6 +32,16 @@ fi
 
 python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync.config -d
 
+echo "================"
+echo "* AFTER DRYRUN *"
+echo "================"
+
+echo $DIR_ORIGIN
+ls -la $DIR_ORIGIN
+
+echo $DIR_DESTINATION
+ls -la $DIR_DESTINATION
+
 if [ ! -f "${DIR_DESTINATION}/file_to_be_copied" ];
 then
   TEST1_1="ok"
@@ -39,6 +53,10 @@ then
 fi
 
 python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync.config
+
+echo "==============="
+echo "* AFTER RSYNC *"
+echo "==============="
 
 echo $DIR_ORIGIN
 ls -la $DIR_ORIGIN
@@ -60,6 +78,16 @@ touch "${DIR_DESTINATION}/file_to_be_copied_back"
 touch "${DIR_ORIGIN}/file_to_be_removed"
 
 python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync.config -b
+
+echo "============="
+echo "* SYNC BACK *"
+echo "============="
+
+echo $DIR_ORIGIN
+ls -la $DIR_ORIGIN
+
+echo $DIR_DESTINATION
+ls -la $DIR_DESTINATION
 
 if [ ! -f "${DIR_ORIGIN}/file_to_be_removed" ];
 then
