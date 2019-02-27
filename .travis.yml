@@ -9,6 +9,11 @@ bundler_args: --without system_tests
 matrix:
   include:
   - rvm: default
+    env: RSYNCMAN="testing"
+    dist: trusty
+    bundler_args:
+    script: sudo /bin/bash ./.travis/rsyncman_testing.sh
+  - rvm: default
     env: LINT=puppetcode
     dist: trusty
     bundler_args:
@@ -38,8 +43,3 @@ matrix:
     dist: trusty
     bundler_args:
     script: sudo service docker restart ; sleep 10 && bundle exec rspec spec/acceptance/*_spec.rb
-  - rvm: default
-    env: RSYNCMAN="testing"
-    dist: trusty
-    bundler_args:
-    script: sudo /bin/bash ./.travis/rsyncman_testing.sh
