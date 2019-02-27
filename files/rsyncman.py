@@ -123,7 +123,7 @@ def runJob(ionice,delete,exclude,rsyncpath,path,remote,remotepath,checkfile,expe
                 logging.info("RSYNC: "+line)
 
             if process.returncode!=0:
-                #https://git.samba.org/?p=rsync.git;a=blob_plain;f=support/rsync-no-vanished;hb=HEAD
+                # https://git.samba.org/?p=rsync.git;a=blob_plain;f=support/rsync-no-vanished;hb=HEAD
                 if process.returncode==24:
                     regex = re.compile(r'^(file has vanished: |rsync warning: some files vanished before they could be transferred)', re.MULTILINE)
                     matches = [m.groups() for m in regex.finditer(data)]
