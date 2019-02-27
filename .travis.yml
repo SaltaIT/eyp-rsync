@@ -42,4 +42,4 @@ matrix:
     env: RSYNCMAN="testing"
     dist: trusty
     bundler_args:
-    script: /bin/bash ./.travis/rsyncman_testing.sh
+    script: sudo /bin/bash ./.travis/rsyncman_testing.sh
