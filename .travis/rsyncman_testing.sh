@@ -35,6 +35,12 @@ echo ""
 
 python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync.config
 
+echo $DIR_ORIGIN
+ls -la $DIR_ORIGIN
+
+echo $DIR_DESTINATION
+ls -la $DIR_DESTINATION
+
 if [ -f "${DIR_DESTINATION}/file_to_be_copied" ];
 then
   TEST1_1="ok"
