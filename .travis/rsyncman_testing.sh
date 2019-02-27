@@ -26,13 +26,6 @@ then
   TEST0_2="ok"
 fi
 
-echo ""
-echo "TEST 0 - check environment"
-echo "======"
-echo "TEST0_1: ${TEST0_1}"
-echo "TEST0_2: ${TEST0_2}"
-echo ""
-
 python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync.config
 
 echo $DIR_ORIGIN
@@ -51,6 +44,11 @@ then
   TEST1_2="ok"
 fi
 
+echo ""
+echo "TEST 0 - check environment"
+echo "======"
+echo "TEST0_1: ${TEST0_1}"
+echo "TEST0_2: ${TEST0_2}"
 echo ""
 echo "TEST 1 - after running rsync"
 echo "======"
