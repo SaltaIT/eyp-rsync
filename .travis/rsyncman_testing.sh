@@ -18,6 +18,25 @@ ls -la $DIR_ORIGIN
 echo $DIR_DESTINATION
 ls -la $DIR_DESTINATION
 
-if [ -f ]
+if [ -f "${DIR_DESTINATION}/file_to_be_copied" ];
+then
+  TEST0_1="ok"
+fi
 
-exit 0
+if [ ! -f "${DIR_DESTINATION}/file_to_be_deleted" ];
+then
+  TEST0_2="ok"
+fi
+
+echo "TEST 0"
+echo "TEST0_1: ${TEST0_1}"
+echo "TEST0_2: ${TEST0_2}"
+
+if [ -z "${TEST0_1}" ] || [ -z "${TEST0_2}" ];
+then
+  echo "FOUND ERRORS"
+  exit 1
+else
+  echo "TESTING OK"
+  exit 0
+fi
