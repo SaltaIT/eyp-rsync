@@ -81,7 +81,7 @@ def get_remote_fs_type(remote, path):
     global error_count
 
     if not remote:
-        return get_fs_type(path)
+        return get_fs_type(path)[0]
 
     #stat -f -c %T .
     command='ssh '+remote+' stat -f -c %T '+path+' 2>/dev/null'
