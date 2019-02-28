@@ -11,6 +11,7 @@ for i in $(pwd)/.travis/*.config
 do
   echo "== $i =="
   cat $i
+  echo ""
 done
 
 echo "###############################################"
