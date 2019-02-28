@@ -11,8 +11,11 @@ for i in $(pwd)/.travis/*.config
 do
   echo "== $i =="
   cat $i
-  echo "###########################"
 done
+
+echo "###############################################"
+echo "################ BEGIN TESTING ################"
+echo "###############################################"
 
 DIR_ORIGIN="$(pwd)/.travis/origin"
 DIR_DESTINATION="$(pwd)/.travis/destination"
