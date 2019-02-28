@@ -179,6 +179,12 @@ echo "======================="
 
 python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync-local-wrong-fs.config
 
+echo $DIR_ORIGIN
+ls -la $DIR_ORIGIN
+
+echo $DIR_DESTINATION
+ls -la $DIR_DESTINATION
+
 if [ -f "${DIR_ORIGIN}/file_not_to_be_copied" ];
 then
   TEST5_1="ok"
@@ -194,6 +200,12 @@ echo "* WRONG REMOTE FSTYPE  *"
 echo "========================"
 
 python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync-remote-wrong-fs.config
+
+echo $DIR_ORIGIN
+ls -la $DIR_ORIGIN
+
+echo $DIR_DESTINATION
+ls -la $DIR_DESTINATION
 
 if [ -f "${DIR_ORIGIN}/file_not_to_be_copied" ];
 then
@@ -212,6 +224,12 @@ echo "====================="
 rm -f "${DIR_ORIGIN}/check_file"
 
 python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync.config
+
+echo $DIR_ORIGIN
+ls -la $DIR_ORIGIN
+
+echo $DIR_DESTINATION
+ls -la $DIR_DESTINATION
 
 if [ -f "${DIR_ORIGIN}/file_not_to_be_copied" ];
 then
