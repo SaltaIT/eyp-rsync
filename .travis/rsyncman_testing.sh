@@ -171,14 +171,13 @@ then
   TEST4_4="ok"
 fi
 
-echo "====================="
-echo "* CHECKFILE FAILURE *"
-echo "====================="
-
-rm -f "${DIR_ORIGIN}/check_file"
 touch "${DIR_ORIGIN}/file_not_to_be_copied"
 
-python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync.config
+echo "======================="
+echo "* WRONG LOCAL FSTYPE  *"
+echo "======================="
+
+python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync-local-wrong-fs.config
 
 if [ -f "${DIR_ORIGIN}/file_not_to_be_copied" ];
 then
@@ -188,6 +187,40 @@ fi
 if [ ! -f "${DIR_DESTINATION}/file_not_to_be_copied" ];
 then
   TEST5_2="ok"
+fi
+
+echo "========================"
+echo "* WRONG REMOTE FSTYPE  *"
+echo "========================"
+
+python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync-remote-wrong-fs.config
+
+if [ -f "${DIR_ORIGIN}/file_not_to_be_copied" ];
+then
+  TEST6_1="ok"
+fi
+
+if [ ! -f "${DIR_DESTINATION}/file_not_to_be_copied" ];
+then
+  TEST6_2="ok"
+fi
+
+echo "====================="
+echo "* CHECKFILE FAILURE *"
+echo "====================="
+
+rm -f "${DIR_ORIGIN}/check_file"
+
+python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync.config
+
+if [ -f "${DIR_ORIGIN}/file_not_to_be_copied" ];
+then
+  TEST7_1="ok"
+fi
+
+if [ ! -f "${DIR_DESTINATION}/file_not_to_be_copied" ];
+then
+  TEST7_2="ok"
 fi
 
 echo ""
@@ -226,10 +259,20 @@ echo "TEST4_2: ${TEST4_2}"
 echo "TEST4_3: ${TEST4_3}"
 echo "TEST4_4: ${TEST4_4}"
 echo ""
-echo "TEST 5 - checkfile failure"
+echo "TEST 5 - wrong local fs type"
 echo "======"
 echo "TEST5_1: ${TEST5_1}"
 echo "TEST5_2: ${TEST5_2}"
+echo ""
+echo "TEST 5 - wrong remote fs type"
+echo "======"
+echo "TEST6_1: ${TEST6_1}"
+echo "TEST6_2: ${TEST6_2}"
+echo ""
+echo "TEST 7 - checkfile failure"
+echo "======"
+echo "TEST7_1: ${TEST7_1}"
+echo "TEST7_2: ${TEST7_2}"
 echo ""
 
 if [ -z "${TEST0_1}" ] || [ -z "${TEST0_2}" ] || [ -z "${TEST0_3}" ] || [ -z "${TEST0_4}" ] || \
@@ -237,7 +280,9 @@ if [ -z "${TEST0_1}" ] || [ -z "${TEST0_2}" ] || [ -z "${TEST0_3}" ] || [ -z "${
     [ -z "${TEST2_1}" ] || [ -z "${TEST2_2}" ] || [ -z "${TEST2_3}" ] || [ -z "${TEST2_4}" ] || \
     [ -z "${TEST3_1}" ] || [ -z "${TEST3_2}" ] || [ -z "${TEST3_3}" ] || [ -z "${TEST3_4}" ] || \
     [ -z "${TEST4_1}" ] || [ -z "${TEST4_2}" ] || [ -z "${TEST4_3}" ] || [ -z "${TEST4_4}" ] || \
-    [ -z "${TEST5_1}" ] || [ -z "${TEST5_2}" ];
+    [ -z "${TEST5_1}" ] || [ -z "${TEST5_2}" ] || \
+    [ -z "${TEST6_1}" ] || [ -z "${TEST6_2}" ] || \
+    [ -z "${TEST7_1}" ] || [ -z "${TEST7_2}" ];
 then
   echo "FOUND ERRORS"
   exit 1
