@@ -75,6 +75,7 @@ Usage: rsyncman.py [-c <config file>] [-b]
 -c,--config: config file
 -b,--syncback: sync from destination to origin
 -d,--dryrun: dry run - just simulate execution
+-S,--canarystring: canary string
 ```
 
 ## Reference

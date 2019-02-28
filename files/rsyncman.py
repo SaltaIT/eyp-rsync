@@ -23,12 +23,13 @@ execute_rsync = True
 # TODO: canary file + canary string
 
 def help():
-    print 'Usage: '+sys.argv[0]+' [-c <config file>] [-b]'
+    print 'Usage: '+sys.argv[0]+' [-c <config file>] [-b] [-d] [-S]'
     print ''
     print '-h,--help: print this message'
     print '-c,--config: config file'
     print '-b,--syncback: sync from destination to origin'
     print '-d,--dryrun: dry run - just simulate execution'
+    print '-S,--canarystring: canary string'
     print ''
 
 def sendReportEmail(to_addr, id_host):
@@ -95,7 +96,7 @@ def get_remote_fs_type(remote, path):
         return data.splitlines()[0]
 
 
-def runJob(ionice,delete,exclude,rsyncpath,path,remote,remotepath,checkfile,expected_fs,expected_remote_fs,syncback,canaryfile):
+def runJob(ionice,delete,exclude,rsyncpath,path,remote,remotepath,checkfile,expected_fs,expected_remote_fs,syncback,canaryfile,canary_string):
     global error_count
     if syncback:
         basename_path=os.path.basename(path)
@@ -106,6 +107,8 @@ def runJob(ionice,delete,exclude,rsyncpath,path,remote,remotepath,checkfile,expe
     if execute_rsync:
         if canaryfile:
             canaryfh = open(canaryfile,"w+")
+            if canary_string:
+                canaryfh.write(canary_string+" - ")
             canaryfh.write(datetime.datetime.fromtimestamp(ts).strftime('%Y%m%d-%H%M%S'))
             canaryfh.close()
         if os.path.exists(checkfile):
@@ -155,13 +158,14 @@ def runJob(ionice,delete,exclude,rsyncpath,path,remote,remotepath,checkfile,expe
         logging.info("DRY RUN: "+command)
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "hc:bd", ["--help", "--config", "--syncback", "--dryrun"])
+    opts, args = getopt.getopt(sys.argv[1:], "hc:bdS:", ["--help", "--config", "--syncback", "--dryrun", "--canarystring"])
 except getopt.GetoptError, err:
     help()
     sys.exit(3)
 
 config_file = './rsyncman.config'
 syncback = False
+canary_string = ''
 
 for opt, value in opts:
     if opt in ("-h", "--help"):
@@ -173,6 +177,8 @@ for opt, value in opts:
         syncback = True
     elif opt in ("-d", "--dryrun"):
         execute_rsync = False
+    elif opt in ("-S", "--canarystring"):
+        canary_string = value
     else:
         assert False, "unhandled option"
         help()
@@ -311,7 +317,7 @@ if len(config.sections()) > 0:
             except:
                 canaryfile=''
 
-            runJob(ionice,delete,exclude,rsyncpath,path,remote,remotepath,checkfile,expected_fs,expected_remote_fs,syncback,canaryfile)
+            runJob(ionice,delete,exclude,rsyncpath,path,remote,remotepath,checkfile,expected_fs,expected_remote_fs,syncback,canaryfile,canary_string)
 
     if error_count >0:
         logging.error("ERRORS FOUND: "+str(error_count))

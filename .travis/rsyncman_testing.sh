@@ -325,6 +325,103 @@ then
   TEST9_4="ok"
 fi
 
+echo "======================"
+echo "* 10 - CANARY STRING *"
+echo "======================"
+
+touch "${DIR_ORIGIN}/canary_string_copy"
+
+python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync-canary.config -S ACCEPTANCE
+
+echo $DIR_ORIGIN
+ls -la $DIR_ORIGIN
+
+echo $DIR_DESTINATION
+ls -la $DIR_DESTINATION
+
+if [ -f "${DIR_ORIGIN}/canary_string_copy" ];
+then
+  TEST10_1="ok"
+fi
+
+if [ -f "${DIR_DESTINATION}/canary_string_copy" ];
+then
+  TEST10_2="ok"
+fi
+
+if [ -s "${DIR_ORIGIN}/canaryfile" ];
+then
+  TEST10_3="ok"
+fi
+
+if [ -s "${DIR_DESTINATION}/canaryfile" ];
+then
+  TEST10_4="ok"
+fi
+
+grep ACCEPTANCE "${DIR_ORIGIN}/canaryfile"
+
+if [ "$?" -eq 0 ];
+then
+  TEST10_5="ok"
+fi
+
+grep ACCEPTANCE "${DIR_DESTINATION}/canaryfile"
+
+if [ "$?" -eq 0 ];
+then
+  TEST10_6="ok"
+fi
+
+echo "=============================="
+echo "* 11 - CANARY FILE SYNC BACK *"
+echo "=============================="
+
+touch "${DIR_DESTINATION}/canary_string_syncback_copy"
+touch "${DIR_ORIGIN}/check_file"
+
+python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync-canary-syncback.config -b -S ACCEPTANCE
+
+echo $DIR_ORIGIN
+ls -la $DIR_ORIGIN
+
+echo $DIR_DESTINATION
+ls -la $DIR_DESTINATION
+
+if [ -f "${DIR_ORIGIN}/canary_string_syncback_copy" ];
+then
+  TEST11_1="ok"
+fi
+
+if [ -f "${DIR_DESTINATION}/canary_string_syncback_copy" ];
+then
+  TEST11_2="ok"
+fi
+
+if [ -s "${DIR_ORIGIN}/canaryfile_syncback" ];
+then
+  TEST11_3="ok"
+fi
+
+if [ -s "${DIR_DESTINATION}/canaryfile_syncback" ];
+then
+  TEST11_4="ok"
+fi
+
+grep ACCEPTANCE "${DIR_ORIGIN}/canaryfile_syncback"
+
+if [ "$?" -eq 0 ];
+then
+  TEST11_5="ok"
+fi
+
+grep ACCEPTANCE "${DIR_DESTINATION}/canaryfile_syncback"
+
+if [ "$?" -eq 0 ];
+then
+  TEST11_6="ok"
+fi
+
 echo ""
 echo "TEST 0 - check environment"
 echo "======"
@@ -389,6 +486,25 @@ echo "TEST9_1: ${TEST9_1}"
 echo "TEST9_2: ${TEST9_2}"
 echo "TEST9_3: ${TEST9_3}"
 echo "TEST9_4: ${TEST9_4}"
+echo ""
+echo "TEST 10 - canary string"
+echo "======"
+echo "TEST10_1: ${TEST10_1}"
+echo "TEST10_2: ${TEST10_2}"
+echo "TEST10_3: ${TEST10_3}"
+echo "TEST10_4: ${TEST10_4}"
+echo "TEST10_5: ${TEST10_5}"
+echo "TEST10_6: ${TEST10_5}"
+echo ""
+echo "TEST 11 - canary string sync back"
+echo "======"
+echo "TEST11_1: ${TEST11_1}"
+echo "TEST11_2: ${TEST11_2}"
+echo "TEST11_3: ${TEST11_3}"
+echo "TEST11_4: ${TEST11_4}"
+echo "TEST11_5: ${TEST11_5}"
+echo "TEST11_6: ${TEST11_6}"
+
 
 if [ -z "${TEST0_1}" ] || [ -z "${TEST0_2}" ] || [ -z "${TEST0_3}" ] || [ -z "${TEST0_4}" ] || \
     [ -z "${TEST1_1}" ] || [ -z "${TEST1_2}" ] || [ -z "${TEST1_3}" ] || [ -z "${TEST1_4}" ] || \
@@ -399,7 +515,9 @@ if [ -z "${TEST0_1}" ] || [ -z "${TEST0_2}" ] || [ -z "${TEST0_3}" ] || [ -z "${
     [ -z "${TEST6_1}" ] || [ -z "${TEST6_2}" ] || \
     [ -z "${TEST7_1}" ] || [ -z "${TEST7_2}" ] || \
     [ -z "${TEST8_1}" ] || [ -z "${TEST8_2}" ] || [ -z "${TEST8_3}" ] || [ -z "${TEST8_4}" ] || \
-    [ -z "${TEST9_1}" ] || [ -z "${TEST9_2}" ] || [ -z "${TEST9_3}" ] || [ -z "${TEST9_4}" ];
+    [ -z "${TEST9_1}" ] || [ -z "${TEST9_2}" ] || [ -z "${TEST9_3}" ] || [ -z "${TEST9_4}" ] || \
+    [ -z "${TEST10_1}" ] || [ -z "${TEST10_2}" ] || [ -z "${TEST10_3}" ] || [ -z "${TEST10_4}" ] || [ -z "${TEST10_5}" ] || [ -z "${TEST10_6}" ] || \
+    [ -z "${TEST11_1}" ] || [ -z "${TEST11_2}" ] || [ -z "${TEST11_3}" ] || [ -z "${TEST11_4}" ] || [ -z "${TEST11_5}" ] || [ -z "${TEST11_6}" ];
 then
   echo "FOUND ERRORS"
   exit 1
