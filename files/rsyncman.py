@@ -196,7 +196,7 @@ except Exception, e:
     sys.exit(1)
 
 try:
-    logdir=config.get('rsyncman', 'logdir').strip('"')
+    logdir=config.get('rsyncman', 'logdir').strip('"').strip("'").strip()
 except:
     logdir=os.path.dirname(os.path.abspath(config_file))
 
@@ -218,12 +218,12 @@ rootLogger.addHandler(fileHandler)
 rootLogger.setLevel(0)
 
 try:
-    to_addr=config.get('rsyncman', 'to').strip('"')
+    to_addr=config.get('rsyncman', 'to').strip('"').strip("'").strip()
 except:
     to_addr=''
 
 try:
-    id_host=config.get('rsyncman', 'host-id').strip('"')
+    id_host=config.get('rsyncman', 'host-id').strip('"').strip("'").strip()
 except:
     id_host=socket.gethostname()
 
@@ -231,30 +231,30 @@ if len(config.sections()) > 0:
     for path in config.sections():
         if path != "rsyncman":
             try:
-                ionice='ionice '+config.get(path, 'ionice').strip('"')+' '
+                ionice='ionice '+config.get(path, 'ionice').strip('"').strip("'").strip()+' '
             except:
                 ionice=''
 
             try:
-                expected_fs=config.get(path, 'expected-fs').strip('"')
+                expected_fs=config.get(path, 'expected-fs').strip('"').strip("'").strip()
             except:
                 expected_fs=''
 
             try:
-                expected_remote_fs=config.get(path, 'expected-remote-fs').strip('"')
+                expected_remote_fs=config.get(path, 'expected-remote-fs').strip('"').strip("'").strip()
             except:
                 expected_remote_fs=''
 
             try:
-                rsyncpath='--rsync-path="'+config.get(path, 'rsync-path').strip('"')+'"'
+                rsyncpath='--rsync-path="'+config.get(path, 'rsync-path').strip('"').strip("'").strip()+'"'
             except:
                 rsyncpath=''
 
             try:
-                if os.path.isabs(config.get(path, 'check-file').strip('"')):
-                    checkfile=config.get(path, 'check-file').strip('"')
+                if os.path.isabs(config.get(path, 'check-file').strip('"').strip("'").strip()):
+                    checkfile=config.get(path, 'check-file').strip('"').strip("'").strip()
                 else:
-                    checkfile=path+'/'+config.get(path, 'check-file').strip('"')
+                    checkfile=path+'/'+config.get(path, 'check-file').strip('"').strip("'").strip()
             except:
                 checkfile=path
 
@@ -280,18 +280,26 @@ if len(config.sections()) > 0:
                 exclude=' '
 
             try:
-                remotepath=config.get(path, 'remote-path').strip('"')
+                remotepath=config.get(path, 'remote-path').strip('"').strip("'").strip()
             except:
                 remotepath=os.path.dirname(path)
 
             try:
-                remote=config.get(path, 'remote').strip('"')
+                remote=config.get(path, 'remote').strip('"').strip("'").strip()
                 if remote:
                     remote=remote+":"
             except Exception, e:
                 logging.error("remote is mandatory, aborting rsync for "+path+" - "+str(e))
                 error_count=error_count+1
                 continue
+
+            try:
+                if os.path.isabs(config.get(path, 'canary-file').strip('"').strip("'").strip()):
+                    canaryfile=config.get(path, 'canary-file').strip('"').strip("'").strip()
+                else:
+                    canaryfile=path+'/'+config.get(path, 'canary-file').strip('"').strip("'").strip()
+            except:
+                canaryfile=''
 
             runJob(ionice,delete,exclude,rsyncpath,path,remote,remotepath,checkfile,expected_fs,expected_remote_fs,syncback)
 
