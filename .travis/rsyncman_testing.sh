@@ -53,11 +53,11 @@ then
   TEST0_4="ok"
 fi
 
-python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync.config -d
+echo "=============="
+echo "* 1 - DRYRUN *"
+echo "=============="
 
-echo "===================="
-echo "* 1 - AFTER DRYRUN *"
-echo "===================="
+python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync.config -d
 
 echo $DIR_ORIGIN
 ls -la $DIR_ORIGIN
@@ -85,11 +85,11 @@ then
   TEST1_4="ok"
 fi
 
-python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync.config
+echo "============="
+echo "* 2 - RSYNC *"
+echo "============="
 
-echo "==================="
-echo "* 2 - AFTER RSYNC *"
-echo "==================="
+python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync.config
 
 echo $DIR_ORIGIN
 ls -la $DIR_ORIGIN
@@ -120,11 +120,11 @@ fi
 touch "${DIR_DESTINATION}/file_to_be_copied_back"
 touch "${DIR_ORIGIN}/file_to_be_removed"
 
-python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync.config -b -d
-
 echo "========================="
 echo "* 3 - SYNC BACK DRY RUN *"
 echo "========================="
+
+python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync.config -b -d
 
 echo $DIR_ORIGIN
 ls -la $DIR_ORIGIN
@@ -152,11 +152,11 @@ then
   TEST3_4="ok"
 fi
 
-python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync.config -b
-
 echo "================="
 echo "* 4 - SYNC BACK *"
 echo "================="
+
+python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync.config -b
 
 echo $DIR_ORIGIN
 ls -la $DIR_ORIGIN
@@ -184,6 +184,7 @@ then
   TEST4_4="ok"
 fi
 
+# check file is not being transfered
 touch "${DIR_ORIGIN}/file_not_to_be_copied"
 
 echo "==========================="
