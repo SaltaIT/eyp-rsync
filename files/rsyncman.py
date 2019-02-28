@@ -20,8 +20,6 @@ from email.MIMEText import MIMEText
 error_count = 0
 execute_rsync = True
 
-# TODO: canary file + canary string
-
 def help():
     print 'Usage: '+sys.argv[0]+' [-c <config file>] [-b] [-d] [-S]'
     print ''
