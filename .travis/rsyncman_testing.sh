@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# pwd
-# /home/travis/build/jordiprats/eyp-rsync
-
 mkdir -p /var/log/rsyncman
 
 sed "s#@@PWD@@#$(pwd)#g" -i $(pwd)/.travis/*.config
@@ -57,7 +54,7 @@ echo "=============="
 echo "* 1 - DRYRUN *"
 echo "=============="
 
-python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync.config -d
+python $(pwd)/files/rsyncman.py -c $(pwd)/.travis/localrsync.config -d
 
 echo $DIR_ORIGIN
 ls -la $DIR_ORIGIN
@@ -89,7 +86,7 @@ echo "============="
 echo "* 2 - RSYNC *"
 echo "============="
 
-python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync.config
+python $(pwd)/files/rsyncman.py -c $(pwd)/.travis/localrsync.config
 
 echo $DIR_ORIGIN
 ls -la $DIR_ORIGIN
@@ -124,7 +121,7 @@ echo "========================="
 echo "* 3 - SYNC BACK DRY RUN *"
 echo "========================="
 
-python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync.config -b -d
+python $(pwd)/files/rsyncman.py -c $(pwd)/.travis/localrsync.config -b -d
 
 echo $DIR_ORIGIN
 ls -la $DIR_ORIGIN
@@ -156,7 +153,7 @@ echo "================="
 echo "* 4 - SYNC BACK *"
 echo "================="
 
-python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync.config -b
+python $(pwd)/files/rsyncman.py -c $(pwd)/.travis/localrsync.config -b
 
 echo $DIR_ORIGIN
 ls -la $DIR_ORIGIN
@@ -191,7 +188,7 @@ echo "==========================="
 echo "* 5 - WRONG LOCAL FSTYPE  *"
 echo "==========================="
 
-python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync-local-wrong-fs.config
+python $(pwd)/files/rsyncman.py -c $(pwd)/.travis/localrsync-local-wrong-fs.config
 
 echo $DIR_ORIGIN
 ls -la $DIR_ORIGIN
@@ -213,7 +210,7 @@ echo "====================================="
 echo "* 5b - WRONG LOCAL FSTYPE SYNC BACK *"
 echo "====================================="
 
-python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync-local-wrong-fs.config -b
+python $(pwd)/files/rsyncman.py -c $(pwd)/.travis/localrsync-local-wrong-fs.config -b
 
 echo $DIR_ORIGIN
 ls -la $DIR_ORIGIN
@@ -235,7 +232,7 @@ echo "==========================="
 echo "* 6 - WRONG REMOTE FSTYPE *"
 echo "==========================="
 
-python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync-remote-wrong-fs.config
+python $(pwd)/files/rsyncman.py -c $(pwd)/.travis/localrsync-remote-wrong-fs.config
 
 echo $DIR_ORIGIN
 ls -la $DIR_ORIGIN
@@ -257,7 +254,7 @@ echo "======================================"
 echo "* 6b - WRONG REMOTE FSTYPE SYNC BACK *"
 echo "======================================"
 
-python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync-remote-wrong-fs.config -b
+python $(pwd)/files/rsyncman.py -c $(pwd)/.travis/localrsync-remote-wrong-fs.config -b
 
 echo $DIR_ORIGIN
 ls -la $DIR_ORIGIN
@@ -281,7 +278,7 @@ echo "========================="
 
 rm -f "${DIR_ORIGIN}/check_file"
 
-python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync.config
+python $(pwd)/files/rsyncman.py -c $(pwd)/.travis/localrsync.config
 
 echo $DIR_ORIGIN
 ls -la $DIR_ORIGIN
@@ -303,7 +300,7 @@ echo "===================================="
 echo "* 7b - CHECKFILE FAILURE SYNC BACK *"
 echo "===================================="
 
-python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync.config -b
+python $(pwd)/files/rsyncman.py -c $(pwd)/.travis/localrsync.config -b
 
 echo $DIR_ORIGIN
 ls -la $DIR_ORIGIN
@@ -328,7 +325,7 @@ echo "==================="
 touch "${DIR_ORIGIN}/canary_copy"
 touch "${DIR_ORIGIN}/check_file"
 
-python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync-canary.config
+python $(pwd)/files/rsyncman.py -c $(pwd)/.travis/localrsync-canary.config
 
 echo $DIR_ORIGIN
 ls -la $DIR_ORIGIN
@@ -363,7 +360,7 @@ echo "============================="
 touch "${DIR_DESTINATION}/canary_syncback_copy"
 touch "${DIR_ORIGIN}/check_file"
 
-python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync-canary-syncback.config -b
+python $(pwd)/files/rsyncman.py -c $(pwd)/.travis/localrsync-canary-syncback.config -b
 
 echo $DIR_ORIGIN
 ls -la $DIR_ORIGIN
@@ -397,7 +394,7 @@ echo "======================"
 
 touch "${DIR_ORIGIN}/canary_string_copy"
 
-python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync-canary.config -S ACCEPTANCE
+python $(pwd)/files/rsyncman.py -c $(pwd)/.travis/localrsync-canary.config -S ACCEPTANCE
 
 echo $DIR_ORIGIN
 ls -la $DIR_ORIGIN
@@ -446,7 +443,7 @@ echo "=============================="
 touch "${DIR_DESTINATION}/canary_string_syncback_copy"
 touch "${DIR_ORIGIN}/check_file"
 
-python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync-canary-syncback.config -b -S ACCEPTANCE
+python $(pwd)/files/rsyncman.py -c $(pwd)/.travis/localrsync-canary-syncback.config -b -S ACCEPTANCE
 
 echo $DIR_ORIGIN
 ls -la $DIR_ORIGIN
