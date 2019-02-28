@@ -259,6 +259,7 @@ echo "* 8 - CANARY FILE *"
 echo "==================="
 
 touch "${DIR_ORIGIN}/canary_copy"
+touch "${DIR_ORIGIN}/check_file"
 
 python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync-canary.config
 
@@ -339,6 +340,12 @@ echo "======"
 echo "TEST7_1: ${TEST7_1}"
 echo "TEST7_2: ${TEST7_2}"
 echo ""
+echo "TEST 8 - canary file"
+echo "======"
+echo "TEST8_1: ${TEST4_1}"
+echo "TEST8_2: ${TEST4_2}"
+echo "TEST8_3: ${TEST4_3}"
+echo "TEST8_4: ${TEST4_4}"
 
 if [ -z "${TEST0_1}" ] || [ -z "${TEST0_2}" ] || [ -z "${TEST0_3}" ] || [ -z "${TEST0_4}" ] || \
     [ -z "${TEST1_1}" ] || [ -z "${TEST1_2}" ] || [ -z "${TEST1_3}" ] || [ -z "${TEST1_4}" ] || \
