@@ -3,7 +3,7 @@
 ## 0.1.10
 
 * **rsyncman**:
-  * added dryrun option to
+  * added dryrun option
   * allow local destinations (ie remote is an empty string)
   * added support for canary-file
   * added flag to be able to configure a canary string to be written in the canary-file
