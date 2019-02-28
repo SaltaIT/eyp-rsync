@@ -269,12 +269,12 @@ ls -la $DIR_ORIGIN
 echo $DIR_DESTINATION
 ls -la $DIR_DESTINATION
 
-if [ -f "${DIR_ORIGIN}/canaryfile" ];
+if [ -f "${DIR_ORIGIN}/canary_copy" ];
 then
   TEST8_1="ok"
 fi
 
-if [ -f "${DIR_DESTINATION}/canaryfile" ];
+if [ -f "${DIR_DESTINATION}/canary_copy" ];
 then
   TEST8_2="ok"
 fi
@@ -285,6 +285,41 @@ then
 fi
 
 if [ -s "${DIR_DESTINATION}/canaryfile" ];
+then
+  TEST8_4="ok"
+fi
+
+echo "============================="
+echo "* 9 - CANARY FILE SYNC BACK *"
+echo "============================="
+
+touch "${DIR_DESTINATION}/canary_syncback_copy"
+touch "${DIR_ORIGIN}/check_file"
+
+python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync-canary.config
+
+echo $DIR_ORIGIN
+ls -la $DIR_ORIGIN
+
+echo $DIR_DESTINATION
+ls -la $DIR_DESTINATION
+
+if [ -f "${DIR_ORIGIN}/canary_syncback_copy" ];
+then
+  TEST8_1="ok"
+fi
+
+if [ -f "${DIR_DESTINATION}/canary_syncback_copy" ];
+then
+  TEST8_2="ok"
+fi
+
+if [ -s "${DIR_ORIGIN}/canaryfile_syncback" ];
+then
+  TEST8_3="ok"
+fi
+
+if [ -s "${DIR_DESTINATION}/canaryfile_syncback" ];
 then
   TEST8_4="ok"
 fi
@@ -342,10 +377,17 @@ echo "TEST7_2: ${TEST7_2}"
 echo ""
 echo "TEST 8 - canary file"
 echo "======"
-echo "TEST8_1: ${TEST4_1}"
-echo "TEST8_2: ${TEST4_2}"
-echo "TEST8_3: ${TEST4_3}"
-echo "TEST8_4: ${TEST4_4}"
+echo "TEST8_1: ${TEST8_1}"
+echo "TEST8_2: ${TEST8_2}"
+echo "TEST8_3: ${TEST8_3}"
+echo "TEST8_4: ${TEST8_4}"
+echo ""
+echo "TEST 9 - canary file sync back"
+echo "======"
+echo "TEST9_1: ${TEST9_1}"
+echo "TEST9_2: ${TEST9_2}"
+echo "TEST9_3: ${TEST9_3}"
+echo "TEST9_4: ${TEST9_4}"
 
 if [ -z "${TEST0_1}" ] || [ -z "${TEST0_2}" ] || [ -z "${TEST0_3}" ] || [ -z "${TEST0_4}" ] || \
     [ -z "${TEST1_1}" ] || [ -z "${TEST1_2}" ] || [ -z "${TEST1_3}" ] || [ -z "${TEST1_4}" ] || \
@@ -355,7 +397,8 @@ if [ -z "${TEST0_1}" ] || [ -z "${TEST0_2}" ] || [ -z "${TEST0_3}" ] || [ -z "${
     [ -z "${TEST5_1}" ] || [ -z "${TEST5_2}" ] || \
     [ -z "${TEST6_1}" ] || [ -z "${TEST6_2}" ] || \
     [ -z "${TEST7_1}" ] || [ -z "${TEST7_2}" ] || \
-    [ -z "${TEST8_1}" ] || [ -z "${TEST8_2}" ] || [ -z "${TEST8_3}" ] || [ -z "${TEST8_4}" ];
+    [ -z "${TEST8_1}" ] || [ -z "${TEST8_2}" ] || [ -z "${TEST8_3}" ] || [ -z "${TEST8_4}" ] || \
+    [ -z "${TEST9_1}" ] || [ -z "${TEST9_2}" ] || [ -z "${TEST9_3}" ] || [ -z "${TEST9_4}" ];
 then
   echo "FOUND ERRORS"
   exit 1
