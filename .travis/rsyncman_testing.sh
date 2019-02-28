@@ -597,6 +597,12 @@ then
   echo "FOUND ERRORS"
   exit 1
 else
-  echo "TESTING OK"
+  cat <<EOF
+  ▄▄█████████████████████████████─
+  ▀▀▀───▀█▄▀▄▀████▀──▀█▄▀▄▀████▀──
+  ────────▀█▄█▄█▀──────▀█▄█▄█▀────
+
+              TESTING OK
+EOF
   exit 0
 fi
