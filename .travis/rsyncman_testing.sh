@@ -121,22 +121,22 @@ ls -la $DIR_DESTINATION
 
 if [ -f "${DIR_ORIGIN}/file_to_be_removed" ];
 then
-  TEST4_1="ok"
+  TEST3_1="ok"
 fi
 
 if [ ! -f "${DIR_ORIGIN}/file_to_be_copied_back" ];
 then
-  TEST4_2="ok"
+  TEST3_2="ok"
 fi
 
 if [ -f "${DIR_ORIGIN}/.snapshot" ];
 then
-  TEST4_3="ok"
+  TEST3_3="ok"
 fi
 
 if [ ! -f "${DIR_DESTINATION}/.snapshot" ];
 then
-  TEST4_4="ok"
+  TEST3_4="ok"
 fi
 
 python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync.config -b
