@@ -68,6 +68,15 @@ rsync::manager::job { 'demo':
 
 ### rsyncman usage
 
+```
+Usage: rsyncman.py [-c <config file>] [-b]
+
+-h,--help: print this message
+-c,--config: config file
+-b,--syncback: sync from destination to origin
+-d,--dryrun: dry run - just simulate execution
+```
+
 ## Reference
 
 ### rsync
@@ -97,6 +106,31 @@ rsync::manager::job { 'demo':
 * **chmod**:           = undef,
 
 ### rsync::manager
+
+#### config options
+
+##### rsyncman section
+
+Global config section
+
+* to
+* host-id
+* logdir
+
+##### job section
+
+Job specific options (can be configured more than one job) Section name is the local path
+
+* ionice
+* rsync-path
+* exclude
+* delete
+* remote
+* remote-path
+* check-file
+* canary-file
+* expected-fs
+* expected-remote-fs
 
 #### rsync::manager::schedule
 
