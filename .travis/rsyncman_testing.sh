@@ -306,22 +306,22 @@ ls -la $DIR_DESTINATION
 
 if [ -f "${DIR_ORIGIN}/canary_syncback_copy" ];
 then
-  TEST8_1="ok"
+  TEST9_1="ok"
 fi
 
 if [ -f "${DIR_DESTINATION}/canary_syncback_copy" ];
 then
-  TEST8_2="ok"
+  TEST9_2="ok"
 fi
 
 if [ -s "${DIR_ORIGIN}/canaryfile_syncback" ];
 then
-  TEST8_3="ok"
+  TEST9_3="ok"
 fi
 
 if [ -s "${DIR_DESTINATION}/canaryfile_syncback" ];
 then
-  TEST8_4="ok"
+  TEST9_4="ok"
 fi
 
 echo ""
