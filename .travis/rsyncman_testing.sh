@@ -11,6 +11,12 @@ do
   echo ""
 done
 
+if [ ! -f "$(pwd)/files/rsyncman.py" ];
+then
+  echo "rsyncman.py NOT FOUND - ABORTING"
+  exit 1
+fi
+
 echo "###############################################"
 echo "################ BEGIN TESTING ################"
 echo "###############################################"
