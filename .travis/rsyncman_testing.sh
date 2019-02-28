@@ -23,9 +23,9 @@ DIR_DESTINATION="$(pwd)/.travis/destination"
 
 pip install -r "$(pwd)/files/requirements.txt"
 
-echo "==============="
-echo "* BASE STATUS *"
-echo "==============="
+echo "==================="
+echo "* 0 - BASE STATUS *"
+echo "==================="
 
 echo $DIR_ORIGIN
 ls -la $DIR_ORIGIN
@@ -55,9 +55,9 @@ fi
 
 python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync.config -d
 
-echo "================"
-echo "* AFTER DRYRUN *"
-echo "================"
+echo "===================="
+echo "* 1 - AFTER DRYRUN *"
+echo "===================="
 
 echo $DIR_ORIGIN
 ls -la $DIR_ORIGIN
@@ -87,9 +87,9 @@ fi
 
 python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync.config
 
-echo "==============="
-echo "* AFTER RSYNC *"
-echo "==============="
+echo "==================="
+echo "* 2 - AFTER RSYNC *"
+echo "==================="
 
 echo $DIR_ORIGIN
 ls -la $DIR_ORIGIN
@@ -122,9 +122,9 @@ touch "${DIR_ORIGIN}/file_to_be_removed"
 
 python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync.config -b -d
 
-echo "====================="
-echo "* SYNC BACK DRY RUN *"
-echo "====================="
+echo "========================="
+echo "* 3 - SYNC BACK DRY RUN *"
+echo "========================="
 
 echo $DIR_ORIGIN
 ls -la $DIR_ORIGIN
@@ -154,9 +154,9 @@ fi
 
 python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync.config -b
 
-echo "============="
-echo "* SYNC BACK *"
-echo "============="
+echo "================="
+echo "* 4 - SYNC BACK *"
+echo "================="
 
 echo $DIR_ORIGIN
 ls -la $DIR_ORIGIN
@@ -186,9 +186,9 @@ fi
 
 touch "${DIR_ORIGIN}/file_not_to_be_copied"
 
-echo "======================="
-echo "* WRONG LOCAL FSTYPE  *"
-echo "======================="
+echo "==========================="
+echo "* 5 - WRONG LOCAL FSTYPE  *"
+echo "==========================="
 
 python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync-local-wrong-fs.config
 
@@ -208,9 +208,9 @@ then
   TEST5_2="ok"
 fi
 
-echo "========================"
-echo "* WRONG REMOTE FSTYPE  *"
-echo "========================"
+echo "============================"
+echo "* 6 - WRONG REMOTE FSTYPE  *"
+echo "============================"
 
 python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync-remote-wrong-fs.config
 
@@ -230,9 +230,9 @@ then
   TEST6_2="ok"
 fi
 
-echo "====================="
-echo "* CHECKFILE FAILURE *"
-echo "====================="
+echo "========================="
+echo "* 7 - CHECKFILE FAILURE *"
+echo "========================="
 
 rm -f "${DIR_ORIGIN}/check_file"
 
@@ -252,6 +252,40 @@ fi
 if [ ! -f "${DIR_DESTINATION}/file_not_to_be_copied" ];
 then
   TEST7_2="ok"
+fi
+
+echo "==================="
+echo "* 8 - CANARY FILE *"
+echo "==================="
+
+touch "${DIR_ORIGIN}/canary_copy"
+
+python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync-canary.config
+
+echo $DIR_ORIGIN
+ls -la $DIR_ORIGIN
+
+echo $DIR_DESTINATION
+ls -la $DIR_DESTINATION
+
+if [ -f "${DIR_ORIGIN}/canaryfile" ];
+then
+  TEST8_1="ok"
+fi
+
+if [ -f "${DIR_DESTINATION}/canaryfile" ];
+then
+  TEST8_2="ok"
+fi
+
+if [ -s "${DIR_ORIGIN}/canaryfile" ];
+then
+  TEST8_3="ok"
+fi
+
+if [ -s "${DIR_DESTINATION}/canaryfile" ];
+then
+  TEST8_4="ok"
 fi
 
 echo ""
@@ -313,7 +347,8 @@ if [ -z "${TEST0_1}" ] || [ -z "${TEST0_2}" ] || [ -z "${TEST0_3}" ] || [ -z "${
     [ -z "${TEST4_1}" ] || [ -z "${TEST4_2}" ] || [ -z "${TEST4_3}" ] || [ -z "${TEST4_4}" ] || \
     [ -z "${TEST5_1}" ] || [ -z "${TEST5_2}" ] || \
     [ -z "${TEST6_1}" ] || [ -z "${TEST6_2}" ] || \
-    [ -z "${TEST7_1}" ] || [ -z "${TEST7_2}" ];
+    [ -z "${TEST7_1}" ] || [ -z "${TEST7_2}" ] || \
+    [ -z "${TEST8_1}" ] || [ -z "${TEST8_2}" ] || [ -z "${TEST8_3}" ] || [ -z "${TEST8_4}" ];
 then
   echo "FOUND ERRORS"
   exit 1

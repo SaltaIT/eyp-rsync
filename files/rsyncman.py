@@ -95,7 +95,7 @@ def get_remote_fs_type(remote, path):
         return data.splitlines()[0]
 
 
-def runJob(ionice,delete,exclude,rsyncpath,path,remote,remotepath,checkfile,expected_fs,expected_remote_fs,syncback):
+def runJob(ionice,delete,exclude,rsyncpath,path,remote,remotepath,checkfile,expected_fs,expected_remote_fs,syncback,canaryfile):
     global error_count
     if syncback:
         basename_path=os.path.basename(path)
@@ -104,6 +104,10 @@ def runJob(ionice,delete,exclude,rsyncpath,path,remote,remotepath,checkfile,expe
     else:
         command=ionice+'rsync -v -a -H -x --numeric-ids '+delete+exclude+rsyncpath+' '+path+' '+remote+remotepath+' 2>&1'
     if execute_rsync:
+        if canaryfile:
+            canaryfh = open(canaryfile,"w+")
+            canaryfh.write(datetime.datetime.fromtimestamp(ts).strftime('%Y%m%d-%H%M%S'))
+            canaryfh.close()
         if os.path.exists(checkfile):
             logging.info("checkfile found: "+checkfile)
 
@@ -295,13 +299,19 @@ if len(config.sections()) > 0:
 
             try:
                 if os.path.isabs(config.get(path, 'canary-file').strip('"').strip("'").strip()):
-                    canaryfile=config.get(path, 'canary-file').strip('"').strip("'").strip()
+                    logging.error(path+": canary file cannot be an absolute path)
+                    error_count=error_count+1
+                    continue
                 else:
-                    canaryfile=path+'/'+config.get(path, 'canary-file').strip('"').strip("'").strip()
+                    if syncback:
+                        canaryfile=remotepath+'/'+config.get(path, 'canary-file').strip('"').strip("'").strip()
+                    else:
+                        canaryfile=path+'/'+config.get(path, 'canary-file').strip('"').strip("'").strip()
+                    logging.debug("canary file: "+canaryfile)
             except:
                 canaryfile=''
 
-            runJob(ionice,delete,exclude,rsyncpath,path,remote,remotepath,checkfile,expected_fs,expected_remote_fs,syncback)
+            runJob(ionice,delete,exclude,rsyncpath,path,remote,remotepath,checkfile,expected_fs,expected_remote_fs,syncback,canaryfile)
 
     if error_count >0:
         logging.error("ERRORS FOUND: "+str(error_count))
