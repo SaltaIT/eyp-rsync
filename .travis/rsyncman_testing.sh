@@ -594,7 +594,7 @@ if [ -z "${TEST0_1}" ] || [ -z "${TEST0_2}" ] || [ -z "${TEST0_3}" ] || [ -z "${
     [ -z "${TEST10_1}" ] || [ -z "${TEST10_2}" ] || [ -z "${TEST10_3}" ] || [ -z "${TEST10_4}" ] || [ -z "${TEST10_5}" ] || [ -z "${TEST10_6}" ] || \
     [ -z "${TEST11_1}" ] || [ -z "${TEST11_2}" ] || [ -z "${TEST11_3}" ] || [ -z "${TEST11_4}" ] || [ -z "${TEST11_5}" ] || [ -z "${TEST11_6}" ];
 then
-  echo "FOUND ERRORS"
+  echo "ERRORS FOUND"
   exit 1
 else
   cat <<EOF
