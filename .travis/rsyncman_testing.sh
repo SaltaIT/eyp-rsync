@@ -5,10 +5,19 @@
 
 mkdir -p /var/log/rsyncman
 
-DIR_ORIGIN="/home/travis/build/jordiprats/eyp-rsync/.travis/origin"
-DIR_DESTINATION="/home/travis/build/jordiprats/eyp-rsync/.travis/destination"
+sed "s#@@PWD@@#$(pwd)#g" -i $(pwd)/.travis/*.config
 
-pip install -r /home/travis/build/jordiprats/eyp-rsync/files/requirements.txt
+for i in $(pwd)/.travis/*.config
+do
+  echo "== $i =="
+  cat $i
+  echo "###########################"
+done
+
+DIR_ORIGIN="$(pwd)/.travis/origin"
+DIR_DESTINATION="$(pwd)/.travis/destination"
+
+pip install -r "$(pwd)/files/requirements.txt"
 
 echo "==============="
 echo "* BASE STATUS *"
