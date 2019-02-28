@@ -299,7 +299,7 @@ if len(config.sections()) > 0:
 
             try:
                 if os.path.isabs(config.get(path, 'canary-file').strip('"').strip("'").strip()):
-                    logging.error(path+": canary file cannot be an absolute path)
+                    logging.error(path+": canary file cannot be an absolute path")
                     error_count=error_count+1
                     continue
                 else:

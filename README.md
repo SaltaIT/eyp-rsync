@@ -66,8 +66,7 @@ rsync::manager::job { 'demo':
 
 ## Usage
 
-Put the classes, types, and resources for customizing, configuring, and doing
-the fancy stuff with your module here.
+### rsyncman usage
 
 ## Reference
 
