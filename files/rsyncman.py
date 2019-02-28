@@ -109,7 +109,7 @@ def runJob(ionice,delete,exclude,rsyncpath,path,remote,remotepath,checkfile,expe
             canaryfh = open(canaryfile,"w+")
             if canary_string:
                 canaryfh.write(canary_string+" - ")
-            canaryfh.write(datetime.datetime.fromtimestamp(ts).strftime('%Y%m%d-%H%M%S'))
+            canaryfh.write(datetime.datetime.fromtimestamp(ts).strftime('%Y%m%d-%H%M%S')+"\n")
             canaryfh.close()
         if os.path.exists(checkfile):
             logging.info("checkfile found: "+checkfile)
