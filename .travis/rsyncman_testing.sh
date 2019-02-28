@@ -598,6 +598,7 @@ if [ -z "${TEST0_1}" ] || [ -z "${TEST0_2}" ] || [ -z "${TEST0_3}" ] || [ -z "${
     [ -z "${TEST11_1}" ] || [ -z "${TEST11_2}" ] || [ -z "${TEST11_3}" ] || [ -z "${TEST11_4}" ] || [ -z "${TEST11_5}" ] || [ -z "${TEST11_6}" ];
 then
   echo "ERRORS FOUND"
+  echo ""
   exit 1
 else
   cat <<EOF
@@ -607,5 +608,6 @@ else
 
               TESTING OK
 EOF
+  echo ""
   exit 0
 fi
