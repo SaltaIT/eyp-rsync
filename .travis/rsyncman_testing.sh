@@ -296,7 +296,7 @@ echo "============================="
 touch "${DIR_DESTINATION}/canary_syncback_copy"
 touch "${DIR_ORIGIN}/check_file"
 
-python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync-canary.config
+python /home/travis/build/jordiprats/eyp-rsync/files/rsyncman.py -c /home/travis/build/jordiprats/eyp-rsync/.travis/localrsync-canary-syncback.config -b
 
 echo $DIR_ORIGIN
 ls -la $DIR_ORIGIN
