@@ -242,23 +242,23 @@ except:
     id_host=socket.gethostname()
 
 try:
-    pre_script=config.get('rsyncman', 'pre-script').strip('"').strip("'").strip()
+    global_pre_script=config.get('rsyncman', 'pre-script').strip('"').strip("'").strip()
 except:
-    pre_script=''
+    global_pre_script=''
 
 try:
-    post_script=config.get('rsyncman', 'post-script').strip('"').strip("'").strip()
+    global_post_script=config.get('rsyncman', 'post-script').strip('"').strip("'").strip()
 except:
-    post_script=''
+    global_post_script=''
 
 #
 # pre script
 #
-if pre_script:
-    logging.info("PRE script command: "+pre_script)
+if global_pre_script:
+    logging.info("PRE script command: "+global_pre_script)
     if execute_rsync:
-        logging.debug("RUNNING PRE script command: "+pre_script)
-        prescript_process = Popen(pre_script,stderr=PIPE,stdout=PIPE,shell=True)
+        logging.debug("RUNNING PRE script command: "+global_pre_script)
+        prescript_process = Popen(global_pre_script,stderr=PIPE,stdout=PIPE,shell=True)
         prescript_data = prescript_process.communicate()[0]
 
         for line in prescript_data.splitlines():
@@ -372,11 +372,11 @@ if len(config.sections()) > 0:
 
                 runJob(ionice,delete,exclude,rsyncpath,path,remote,remotepath,checkfile,expected_fs,expected_remote_fs,syncback,canaryfile,canary_string,exclude_from,default_reverse,compress)
 
-    if post_script:
-        logging.info("POST script command: "+post_script)
+    if global_post_script:
+        logging.info("POST script command: "+global_post_script)
         if execute_rsync:
-            logging.debug("RUNNING post script command: "+post_script)
-            postscript_process = Popen(post_script,stderr=PIPE,stdout=PIPE,shell=True)
+            logging.debug("RUNNING post script command: "+global_post_script)
+            postscript_process = Popen(global_post_script,stderr=PIPE,stdout=PIPE,shell=True)
             postscript_data = postscript_process.communicate()[0]
 
             for line in postscript_data.splitlines():
