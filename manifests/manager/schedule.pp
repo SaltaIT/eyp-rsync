@@ -12,6 +12,8 @@ define rsync::manager::schedule (
                                   $mail_to       = undef,
                                   $host_id       = undef,
                                   $logdir        = '/var/log/rsyncman',
+                                  $pre_script    = undef,
+                                  $post_script   = undef,
                                 ) {
   include ::rsync::manager
 

@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 0.1.11
+
+* **rsyncman**:
+  - added exclude-from
+  - added default-reverse flag
+  - added compress flag
+  - added pre and post execution scripts
+
 ## 0.1.10
 
 * **rsyncman**:

@@ -6,10 +6,13 @@ define rsync::manager::job(
                             $ionice_args        = undef,
                             $rsync_path         = undef,
                             $exclude            = [],
+                            $exclude_from       = undef,
                             $delete             = false,
+                            $compress           = false,
                             $check_file         = undef,
                             $expected_fs        = undef,
                             $expected_remote_fs = undef,
+                            $default_reverse    = false,
                             $order              = '42',
                           ) {
   include rsync::manager

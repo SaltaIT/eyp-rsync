@@ -6,6 +6,9 @@ ionice="<%= @ionice_args %>"
 <% if defined?(@rsync_path) -%>
 rsync-path="<%= @rsync_path %>"
 <% end -%>
+<% if defined?(@exclude_from) -%>
+exclude-from=<%= @exclude_from %>
+<% end -%>
 <% if @exclude.any? -%>
 exclude = [ <%= @exclude.map{ |val| "\"#{val}\"" }.join(',') %> ]
 <% end -%>
@@ -23,3 +26,5 @@ expected-fs=<%= @expected_fs %>
 <% if defined?(@expected_remote_fs) -%>
 expected-remote-fs=<%= @expected_remote_fs %>
 <% end -%>
+default-reverse=<%= @default_reverse %>
+compress=<%= @compress %>

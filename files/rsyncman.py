@@ -94,14 +94,20 @@ def get_remote_fs_type(remote, path):
         return data.splitlines()[0]
 
 
-def runJob(ionice,delete,exclude,rsyncpath,path,remote,remotepath,checkfile,expected_fs,expected_remote_fs,syncback,canaryfile,canary_string):
+def runJob(ionice,delete,exclude,rsyncpath,path,remote,remotepath,checkfile,expected_fs,expected_remote_fs,syncback,canaryfile,canary_string,exclude_from,default_reverse,compress):
     global error_count
-    if syncback:
+
+    if default_reverse:
+        move_data_from_remote= not syncback
+    else:
+        move_data_from_remote=syncback
+
+    if move_data_from_remote:
         basename_path=os.path.basename(path)
         dirname_path=os.path.dirname(path)
-        command=ionice+'rsync -v -a -H -x --numeric-ids '+delete+exclude+rsyncpath+' '+remote+remotepath+'/'+basename_path+' '+dirname_path+' 2>&1'
+        command=ionice+'rsync -v -a -H -x --numeric-ids '+compress+delete+exclude_from+exclude+rsyncpath+' '+remote+remotepath+'/'+basename_path+' '+dirname_path+' 2>&1'
     else:
-        command=ionice+'rsync -v -a -H -x --numeric-ids '+delete+exclude+rsyncpath+' '+path+' '+remote+remotepath+' 2>&1'
+        command=ionice+'rsync -v -a -H -x --numeric-ids '+compress+delete+exclude_from+exclude+rsyncpath+' '+path+' '+remote+remotepath+' 2>&1'
     if execute_rsync:
         if canaryfile:
             canaryfh = open(canaryfile,"w+")
@@ -235,87 +241,151 @@ try:
 except:
     id_host=socket.gethostname()
 
+try:
+    pre_script=config.get('rsyncman', 'pre-script').strip('"').strip("'").strip()
+except:
+    pre_script=''
+
+try:
+    post_script=config.get('rsyncman', 'post-script').strip('"').strip("'").strip()
+except:
+    post_script=''
+
+#
+# pre script
+#
+if pre_script:
+    logging.info("PRE script command: "+pre_script)
+if pre_script and execute_rsync:
+    prescript_process = Popen(pre_script,stderr=PIPE,stdout=PIPE,shell=True)
+    prescript_data = prescript_process.communicate()[0]
+
+    prescript_returncode=prescript_data.returncode
+
+    for line in prescript_data.splitlines():
+        logging.info("pre script: "+line)
+
+    if prescript_returncode!=0:
+        logging.error("pre script returned "+str(prescript_returncode)+" - expected: 0")
+        error_count=error_count+1
+else:
+    prescript_returncode=0
+
 if len(config.sections()) > 0:
-    for path in config.sections():
-        if path != "rsyncman":
-            try:
-                ionice='ionice '+config.get(path, 'ionice').strip('"').strip("'").strip()+' '
-            except:
-                ionice=''
 
-            try:
-                expected_fs=config.get(path, 'expected-fs').strip('"').strip("'").strip()
-            except:
-                expected_fs=''
-
-            try:
-                expected_remote_fs=config.get(path, 'expected-remote-fs').strip('"').strip("'").strip()
-            except:
-                expected_remote_fs=''
-
-            try:
-                rsyncpath='--rsync-path="'+config.get(path, 'rsync-path').strip('"').strip("'").strip()+'"'
-            except:
-                rsyncpath=''
-
-            try:
-                if os.path.isabs(config.get(path, 'check-file').strip('"').strip("'").strip()):
-                    checkfile=config.get(path, 'check-file').strip('"').strip("'").strip()
-                else:
-                    checkfile=path+'/'+config.get(path, 'check-file').strip('"').strip("'").strip()
-            except:
-                checkfile=path
-
-            try:
-                if config.getboolean(path, 'delete'):
-                    delete='--delete'
-                else:
-                    delete=''
-            except:
-                delete=''
-
-            try:
-                exclude_config_get = config.get(path,'exclude')
+    if prescript_returncode==0:
+        for path in config.sections():
+            if path != "rsyncman":
                 try:
-                    exclude=' '
-                    for item in json.loads(exclude_config_get):
-                        exclude+='--exclude '+item+' '
-                except Exception, e:
-                    logging.error("error reading excludes for  "+path+" - ABORTING - "+str(e))
-                    error_count=error_count+1
-                    continue
-            except:
-                exclude=' '
+                    ionice='ionice '+config.get(path, 'ionice').strip('"').strip("'").strip()+' '
+                except:
+                    ionice=''
 
-            try:
-                remotepath=config.get(path, 'remote-path').strip('"').strip("'").strip()
-            except:
-                remotepath=os.path.dirname(path)
+                try:
+                    expected_fs=config.get(path, 'expected-fs').strip('"').strip("'").strip()
+                except:
+                    expected_fs=''
 
-            try:
-                remote=config.get(path, 'remote').strip('"').strip("'").strip()
-                if remote:
-                    remote=remote+":"
-            except Exception, e:
-                logging.error("remote is mandatory, aborting rsync for "+path+" - "+str(e))
-                error_count=error_count+1
-                continue
+                try:
+                    expected_remote_fs=config.get(path, 'expected-remote-fs').strip('"').strip("'").strip()
+                except:
+                    expected_remote_fs=''
 
-            try:
-                if os.path.isabs(config.get(path, 'canary-file').strip('"').strip("'").strip()):
-                    logging.error(path+": canary file cannot be an absolute path")
-                    error_count=error_count+1
-                    continue
-                else:
-                    if syncback:
-                        canaryfile=remotepath+'/'+config.get(path, 'canary-file').strip('"').strip("'").strip()
+                try:
+                    default_reverse=config.getboolean(path, 'default-reverse')
+                except:
+                    default_reverse=False
+
+                try:
+                    if config.getboolean(path, 'compress'):
+                        compress='-z '
+                except:
+                    compress=''
+
+                try:
+                    rsyncpath='--rsync-path="'+config.get(path, 'rsync-path').strip('"').strip("'").strip()+'"'
+                except:
+                    rsyncpath=''
+
+                try:
+                    if os.path.isabs(config.get(path, 'check-file').strip('"').strip("'").strip()):
+                        checkfile=config.get(path, 'check-file').strip('"').strip("'").strip()
                     else:
-                        canaryfile=path+'/'+config.get(path, 'canary-file').strip('"').strip("'").strip()
-                    logging.debug("canary file: "+canaryfile)
-            except:
-                canaryfile=''
+                        checkfile=path+'/'+config.get(path, 'check-file').strip('"').strip("'").strip()
+                except:
+                    checkfile=path
 
-            runJob(ionice,delete,exclude,rsyncpath,path,remote,remotepath,checkfile,expected_fs,expected_remote_fs,syncback,canaryfile,canary_string)
+                try:
+                    if config.getboolean(path, 'delete'):
+                        delete='--delete'
+                    else:
+                        delete=''
+                except:
+                    delete=''
+
+                try:
+                    exclude_config_get = config.get(path,'exclude')
+                    try:
+                        exclude=' '
+                        for item in json.loads(exclude_config_get):
+                            exclude+='--exclude '+item+' '
+                    except Exception, e:
+                        logging.error("error reading excludes for  "+path+" - ABORTING - "+str(e))
+                        error_count=error_count+1
+                        continue
+                except:
+                    exclude=' '
+
+                try:
+                    exclude_from="--exclude-from "+config.get(path, 'exclude-from').strip('"').strip("'").strip()+' '
+                except:
+                    exclude_from=''
+
+                try:
+                    remotepath=config.get(path, 'remote-path').strip('"').strip("'").strip()
+                except:
+                    remotepath=os.path.dirname(path)
+
+                try:
+                    remote=config.get(path, 'remote').strip('"').strip("'").strip()
+                    if remote:
+                        remote=remote+":"
+                except Exception, e:
+                    logging.error("remote is mandatory, aborting rsync for "+path+" - "+str(e))
+                    error_count=error_count+1
+                    continue
+
+                try:
+                    if os.path.isabs(config.get(path, 'canary-file').strip('"').strip("'").strip()):
+                        logging.error(path+": canary file cannot be an absolute path")
+                        error_count=error_count+1
+                        continue
+                    else:
+                        if syncback:
+                            canaryfile=remotepath+'/'+config.get(path, 'canary-file').strip('"').strip("'").strip()
+                        else:
+                            canaryfile=path+'/'+config.get(path, 'canary-file').strip('"').strip("'").strip()
+                        logging.debug("canary file: "+canaryfile)
+                except:
+                    canaryfile=''
+
+                runJob(ionice,delete,exclude,rsyncpath,path,remote,remotepath,checkfile,expected_fs,expected_remote_fs,syncback,canaryfile,canary_string,exclude_from,default_reverse,compress)
+
+    if post_script:
+        logging.info("POST script command: "+post_script)
+    if post_script and execute_rsync:
+        logging.debug("post script command: "+post_script)
+        postscript_process = Popen(post_script,stderr=PIPE,stdout=PIPE,shell=True)
+        postscript_data = postscript_process.communicate()[0]
+
+        postscript_returncode=postscript_data.returncode
+
+        for line in prescript_data.splitlines():
+            logging.info("post script: "+line)
+
+        if postscript_returncode!=0:
+            logging.error("post script returned "+str(postscript_returncode)+" - expected: 0")
+            error_count=error_count+1
 
     if error_count >0:
         logging.error("ERRORS FOUND: "+str(error_count))

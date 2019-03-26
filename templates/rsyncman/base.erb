@@ -6,3 +6,9 @@ to=<%= @mail_to %>
 host-id=<%= @host_id %>
 <% end -%>
 logdir=<%= @logdir %>
+<% if defined?(@pre_script) -%>
+pre-script=<%= @pre_script %>
+<% end -%>
+<% if defined?(@post_script) -%>
+post-script=<%= @post_script %>
+<% end -%>
