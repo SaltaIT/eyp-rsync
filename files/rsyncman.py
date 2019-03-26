@@ -257,6 +257,7 @@ except:
 if pre_script:
     logging.info("PRE script command: "+pre_script)
     if execute_rsync:
+        logging.debug("RUNNING PRE script command: "+pre_script)
         prescript_process = Popen(pre_script,stderr=PIPE,stdout=PIPE,shell=True)
         prescript_data = prescript_process.communicate()[0]
 
@@ -374,7 +375,7 @@ if len(config.sections()) > 0:
     if post_script:
         logging.info("POST script command: "+post_script)
         if execute_rsync:
-            logging.debug("post script command: "+post_script)
+            logging.debug("RUNNING post script command: "+post_script)
             postscript_process = Popen(post_script,stderr=PIPE,stdout=PIPE,shell=True)
             postscript_data = postscript_process.communicate()[0]
 
