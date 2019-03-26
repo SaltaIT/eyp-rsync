@@ -260,10 +260,10 @@ if pre_script and execute_rsync:
     prescript_process = Popen(pre_script,stderr=PIPE,stdout=PIPE,shell=True)
     prescript_data = prescript_process.communicate()[0]
 
-    prescript_returncode=prescript_data.returncode
-
     for line in prescript_data.splitlines():
         logging.info("pre script: "+line)
+
+    prescript_returncode=prescript_process.returncode
 
     if prescript_returncode!=0:
         logging.error("pre script returned "+str(prescript_returncode)+" - expected: 0")
@@ -317,7 +317,7 @@ if len(config.sections()) > 0:
 
                 try:
                     if config.getboolean(path, 'delete'):
-                        delete='--delete'
+                        delete='--delete '
                     else:
                         delete=''
                 except:
@@ -378,10 +378,10 @@ if len(config.sections()) > 0:
         postscript_process = Popen(post_script,stderr=PIPE,stdout=PIPE,shell=True)
         postscript_data = postscript_process.communicate()[0]
 
-        postscript_returncode=postscript_data.returncode
-
-        for line in prescript_data.splitlines():
+        for line in postscript_data.splitlines():
             logging.info("post script: "+line)
+
+        postscript_returncode=postscript_process.returncode
 
         if postscript_returncode!=0:
             logging.error("post script returned "+str(postscript_returncode)+" - expected: 0")
