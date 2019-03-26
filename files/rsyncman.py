@@ -256,18 +256,18 @@ except:
 #
 if pre_script:
     logging.info("PRE script command: "+pre_script)
-if pre_script and execute_rsync:
-    prescript_process = Popen(pre_script,stderr=PIPE,stdout=PIPE,shell=True)
-    prescript_data = prescript_process.communicate()[0]
+    if execute_rsync:
+        prescript_process = Popen(pre_script,stderr=PIPE,stdout=PIPE,shell=True)
+        prescript_data = prescript_process.communicate()[0]
 
-    for line in prescript_data.splitlines():
-        logging.info("pre script: "+line)
+        for line in prescript_data.splitlines():
+            logging.info("pre script: "+line)
 
-    prescript_returncode=prescript_process.returncode
+        prescript_returncode=prescript_process.returncode
 
-    if prescript_returncode!=0:
-        logging.error("pre script returned "+str(prescript_returncode)+" - expected: 0")
-        error_count=error_count+1
+        if prescript_returncode!=0:
+            logging.error("pre script returned "+str(prescript_returncode)+" - expected: 0")
+            error_count=error_count+1
 else:
     prescript_returncode=0
 
@@ -373,19 +373,19 @@ if len(config.sections()) > 0:
 
     if post_script:
         logging.info("POST script command: "+post_script)
-    if post_script and execute_rsync:
-        logging.debug("post script command: "+post_script)
-        postscript_process = Popen(post_script,stderr=PIPE,stdout=PIPE,shell=True)
-        postscript_data = postscript_process.communicate()[0]
+        if execute_rsync:
+            logging.debug("post script command: "+post_script)
+            postscript_process = Popen(post_script,stderr=PIPE,stdout=PIPE,shell=True)
+            postscript_data = postscript_process.communicate()[0]
 
-        for line in postscript_data.splitlines():
-            logging.info("post script: "+line)
+            for line in postscript_data.splitlines():
+                logging.info("post script: "+line)
 
-        postscript_returncode=postscript_process.returncode
+            postscript_returncode=postscript_process.returncode
 
-        if postscript_returncode!=0:
-            logging.error("post script returned "+str(postscript_returncode)+" - expected: 0")
-            error_count=error_count+1
+            if postscript_returncode!=0:
+                logging.error("post script returned "+str(postscript_returncode)+" - expected: 0")
+                error_count=error_count+1
 
     if error_count >0:
         logging.error("ERRORS FOUND: "+str(error_count))
