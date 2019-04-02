@@ -21,6 +21,5 @@ define rsync::manager::job(
     target  => "/etc/rsyncman/${schedule_name}.conf",
     order   => "b${order}",
     content => template("${module_name}/rsyncman/job.erb"),
-    require => Concat["/etc/rsyncman/${schedule_name}.conf"],
   }
 }

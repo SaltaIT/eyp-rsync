@@ -26,6 +26,7 @@ define rsync::manager::schedule (
     month    => $month,
     monthday => $monthday,
     weekday  => $weekday,
+    require  => Concat["/etc/rsyncman/${schedule_name}.conf"],
   }
 
   concat { "/etc/rsyncman/${schedule_name}.conf":
