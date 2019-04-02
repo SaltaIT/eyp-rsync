@@ -87,6 +87,8 @@ Usage: rsyncman.py [-c <config file>] [-b]
 
 #### rsync::scheduledrsync
 
+Plain rsync configuration
+
 * **origin**:,
 * **destination**:,
 * **ensure**:          = 'present',
@@ -108,11 +110,13 @@ Usage: rsyncman.py [-c <config file>] [-b]
 
 ### rsync::manager
 
-Default configuation file for rsyncman is expected to be ./rsyncman.config, but can be used a different file using the -c option
+rsyncman is a python script intended for simplifying failover and failback operations.
 
 #### config options
 
-Configuration file will habe a global config section (rsyncman) and as many path as needed
+Default configuation file for rsyncman is expected to be ./rsyncman.config, but can be used a different file using the -c option, Puppet alredy manages this so there's not need to worry about it unless is manually managed.
+
+The actual configuration file is required to have a global config section (rsyncman) besides of as many paths (sections) that are needed
 
 ##### rsyncman section
 
@@ -121,6 +125,8 @@ Global config section
 * logdir
 * to
 * host-id
+* pre-script
+* post-script
 
 ##### job section
 
@@ -136,6 +142,8 @@ Job specific options (can be configured more than one job) Section name is the l
 * canary-file
 * expected-fs
 * expected-remote-fs
+* default-reverse
+* compress
 
 ##### example config file
 
@@ -156,7 +164,6 @@ check-file=is.mounted
 expected-fs=nfs
 expected-remote-fs=nfs
 ```
-
 
 #### rsync::manager::schedule
 
@@ -188,6 +195,8 @@ It MUST belong to an **rsync::manager::schedule** specified using the **schedule
 * **expected_fs**:        = undef,
 * **expected_remote_fs**: = undef,
 * **order**:              = '42',
+* **default_reverse**:    = false,
+* **compress**:           = false,
 
 Example:
 
