@@ -210,7 +210,7 @@ rsync::manager::job { 'demo':
 
 ## Limitations
 
-Tested on CentOS 6/7 and on Ubuntu 14.04 but should work anywhere
+Tested on CentOS 6/7 and on Ubuntu 14.04 but should work anywhere. rsyncman is a python script, so python needs to be installed on the system
 
 ## Development
 
