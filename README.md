@@ -210,7 +210,7 @@ rsync::manager::job { 'demo':
 
 ## Limitations
 
-Tested on CentOS and on Ubuntu but should work anywhere
+Tested on CentOS but should work anywhere
 
 ## Development
 
