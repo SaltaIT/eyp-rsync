@@ -174,6 +174,8 @@ expected-remote-fs=nfs
 
 #### rsync::manager::job
 
+It MUST belong to an **rsync::manager::schedule** specified using the **schedule_name** option
+
 * **path**:,
 * **remote**:,
 * **remote_path**:        = undef,
@@ -186,6 +188,25 @@ expected-remote-fs=nfs
 * **expected_fs**:        = undef,
 * **expected_remote_fs**: = undef,
 * **order**:              = '42',
+
+Example:
+
+```puppet
+class { 'rsync::manager':
+}
+
+rsync::manager::schedule { 'demo':
+  mail_to => 'jordi@systemadmin.es',
+  host_id => 'demopuppet',
+}
+
+rsync::manager::job { 'demo':
+  path        => '/demo',
+  remote      => 'jprats@127.0.0.1',
+  exclude     => [ 'a', 'b', 'c' ],
+  remote_path => '/demo2',
+}
+```
 
 ## Limitations
 
