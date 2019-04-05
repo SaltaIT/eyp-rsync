@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.1.13
+
+* several minor bugfixes for **rsyncman**
+
 ## 0.1.12
 
 * rsyncman: fix dependencies **rsync::manager::job**
