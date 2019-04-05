@@ -269,6 +269,8 @@ if global_pre_script:
         if prescript_returncode!=0:
             logging.error("pre script returned "+str(prescript_returncode)+" - expected: 0")
             error_count=error_count+1
+    else:
+        prescript_returncode=0
 else:
     prescript_returncode=0
 
