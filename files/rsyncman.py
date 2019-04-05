@@ -255,7 +255,7 @@ except:
 
 try:
     global_post_script=config.get('rsyncman', 'post-script').strip('"').strip("'").strip()
-    if not os.path.isfile(global_post_script) and os.access(global_post_script, os.X_OK)
+    if not os.path.isfile(global_post_script):
         logging.error("ERROR pre-script does NOT exists: "+global_post_script)
         sys.exit(1)
     else:
