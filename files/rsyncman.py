@@ -243,11 +243,17 @@ except:
 
 try:
     global_pre_script=config.get('rsyncman', 'pre-script').strip('"').strip("'").strip()
+    if not os.path.isfile(global_pre_script)
+        logging.error("ERROR pre-script does NOT exists: "+global_pre_script)
+        sys.exit(1)
 except:
     global_pre_script=''
 
 try:
     global_post_script=config.get('rsyncman', 'post-script').strip('"').strip("'").strip()
+    if not os.path.isfile(global_post_script)
+        logging.error("ERROR pre-script does NOT exists: "+global_post_script)
+        sys.exit(1)
 except:
     global_post_script=''
 
