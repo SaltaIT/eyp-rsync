@@ -183,8 +183,8 @@ expected-remote-fs=nfs
 
 It MUST belong to an **rsync::manager::schedule** specified using the **schedule_name** option
 
-* **path**:,
-* **remote**:,
+* **path**:
+* **remote**:
 * **remote_path**:        = undef,
 * **schedule_name**:      = $name,
 * **ionice_args**:        = undef,
