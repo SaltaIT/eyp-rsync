@@ -302,6 +302,8 @@ if len(config.sections()) > 0:
                 try:
                     if config.getboolean(path, 'compress'):
                         compress='-z '
+                    else:
+                        compress=''
                 except:
                     compress=''
 
