@@ -146,7 +146,7 @@ def runJob(ionice,delete,exclude,rsyncpath,path,remote,remotepath,checkfile,expe
                     matches = [m.groups() for m in regex.finditer(data)]
 
                     if len(matches) > 0:
-                        logging.info(path+" competed successfully")
+                        logging.info(path+" completed successfully")
                     else:
                         logging.error("ERROR found running job for "+path)
                         error_count=error_count+1
@@ -154,7 +154,7 @@ def runJob(ionice,delete,exclude,rsyncpath,path,remote,remotepath,checkfile,expe
                     logging.error("ERROR found running job for "+path)
                     error_count=error_count+1
             else:
-                logging.info(path+" competed successfully")
+                logging.info(path+" completed successfully")
         else:
             logging.error("ABORTING "+path+": check file does NOT exists: "+checkfile)
             error_count=error_count+1
