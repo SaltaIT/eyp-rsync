@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.1.14
+
+* improved error/warning log for rsyncman
+
 ## 0.1.13
 
 * several minor bugfixes for **rsyncman**
