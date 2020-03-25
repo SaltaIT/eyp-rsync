@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.1.15
+
+* renamed package for **CentOS 7**
+
 ## 0.1.14
 
 * improved error/warning log for rsyncman
