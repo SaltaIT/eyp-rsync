@@ -17,6 +17,7 @@ class rsync::params {
           $rsyncman_dependencies = [ 'python-psutil' ]
         }
       }
+    }
     'Debian':
     {
       $rsyncman_dependencies = [ 'python-psutil' ]

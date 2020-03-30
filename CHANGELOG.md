@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 0.1.15
+## 0.1.16
 
 * renamed package for **CentOS 7**
 
