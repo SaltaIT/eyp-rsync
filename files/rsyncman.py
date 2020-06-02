@@ -94,7 +94,7 @@ def get_remote_fs_type(remote, path):
         return data.splitlines()[0]
 
 
-def runJob(ionice,delete,exclude,rsyncpath,path,remote,remotepath,checkfile,expected_fs,expected_remote_fs,syncback,canaryfile,canary_string,exclude_from,default_reverse,compress):
+def runJob(ionice,delete,exclude,rsyncpath,path,remote,remotepath,checkfile,expected_fs,expected_remote_fs,syncback,canaryfile,canary_string,exclude_from,default_reverse,compress, timeout):
     global error_count
 
     if default_reverse:
@@ -133,8 +133,17 @@ def runJob(ionice,delete,exclude,rsyncpath,path,remote,remotepath,checkfile,expe
                 return
 
             logging.debug("RSYNC command: "+command)
+
+
+
             process = Popen(command,stderr=PIPE,stdout=PIPE,shell=True)
-            data = process.communicate()[0]
+
+            timer = Timer(timeout, process.kill)
+            try:
+                timer.start()
+                data = process.communicate()[0]
+            finally:
+                timer.cancel()
 
             for line in data.splitlines():
                 logging.info("RSYNC: "+line)
@@ -210,9 +219,14 @@ except Exception, e:
     sys.exit(1)
 
 try:
-    logdir=config.get('rsyncman', 'logdir').strip('"').strip("'").strip()
+    logdir = config.get('rsyncman', 'logdir').strip('"').strip("'").strip()
 except:
-    logdir=os.path.dirname(os.path.abspath(config_file))
+    logdir = os.path.dirname(os.path.abspath(config_file))
+
+try:
+    timeout = config.get('rsyncman', 'timeout').strip('"').strip("'").strip()
+except:
+    timeout = 3600
 
 ts = time.time()
 
@@ -388,7 +402,7 @@ if len(config.sections()) > 0:
                 except:
                     canaryfile=''
 
-                runJob(ionice,delete,exclude,rsyncpath,path,remote,remotepath,checkfile,expected_fs,expected_remote_fs,syncback,canaryfile,canary_string,exclude_from,default_reverse,compress)
+                runJob(ionice,delete,exclude,rsyncpath,path,remote,remotepath,checkfile,expected_fs,expected_remote_fs,syncback,canaryfile,canary_string,exclude_from,default_reverse,compress, timeout)
 
     if global_post_script:
         logging.info("POST script command: "+global_post_script)

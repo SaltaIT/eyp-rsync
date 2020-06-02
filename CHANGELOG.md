@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.1.17
+
+* added timeout for rsync (default: 3600 seconds)
+
 ## 0.1.16
 
 * renamed package for **CentOS 7**

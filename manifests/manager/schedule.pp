@@ -14,6 +14,7 @@ define rsync::manager::schedule (
                                   $logdir        = '/var/log/rsyncman',
                                   $pre_script    = undef,
                                   $post_script   = undef,
+                                  $timeout       = '3600',
                                 ) {
   include ::rsync::manager
 
