@@ -1,21 +1,23 @@
 #!/usr/bin/python
 
+import datetime, time
+import psutil,os
+import logging
 import os.path
 import getpass
-import sys
-import logging
-import json
-import psutil,os
-import datetime, time
-import socket
 import smtplib
-import re
+import socket
 import getopt
+import json
+import sys
+import re
+
+from email.MIMEMultipart import MIMEMultipart
 from ConfigParser import SafeConfigParser
 from subprocess import Popen,PIPE,STDOUT
-from os import access, R_OK
-from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
+from os import access, R_OK
+from threading import Timer
 
 error_count = 0
 execute_rsync = True
