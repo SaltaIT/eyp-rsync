@@ -1,6 +1,6 @@
 {
   "name": "eyp-rsync",
-  "version": "0.1.17",
+  "version": "1.0.17",
   "author": "Jordi Prats",
   "summary": "rsync and rsyncman job management",
   "license": "Apache-2.0",
